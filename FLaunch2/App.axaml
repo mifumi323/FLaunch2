@@ -7,4 +7,10 @@
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+    <TrayIcon.Icons>
+      <TrayIcons>
+        <TrayIcon Icon="/Assets/FLaunch.ico" ToolTipText="浮き沈みランチャー">
+        </TrayIcon>
+      </TrayIcons>
+    </TrayIcon.Icons>
 </Application>
