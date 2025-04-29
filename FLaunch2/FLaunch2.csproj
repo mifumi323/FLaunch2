@@ -5,6 +5,12 @@
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <ApplicationIcon>Assets\FLaunch.ico</ApplicationIcon>
+    <Copyright>Copyright (C) 2025 Mifumi Matsuda</Copyright>
+    <RepositoryUrl>https://github.com/mifumi323/FLaunch2</RepositoryUrl>
+    <VersionPrefix>2.0.0</VersionPrefix>
+    <Description>最近良く使う項目ほど上に来るタスクトレイ常駐型ランチャー</Description>
+    <Title>浮き沈みランチャー</Title>
+    <Company>MifuminSoft</Company>
   </PropertyGroup>
 
   <ItemGroup>
