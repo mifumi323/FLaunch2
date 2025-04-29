@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:FLaunch2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="FLaunch2.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/FLaunch.ico"
         Title="FLaunch2">
         <views:MainView />
 </Window>
