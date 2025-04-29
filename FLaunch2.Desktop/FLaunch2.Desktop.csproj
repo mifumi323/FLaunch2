@@ -8,6 +8,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\FLaunch2\Assets\FLaunch.ico</ApplicationIcon>
+    <AssemblyName>FLaunch</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
