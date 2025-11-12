@@ -6,7 +6,7 @@ With its customizable interface and extensive features, FLaunch2 makes it easy t
 
 ## 使ってる技術(Tech Stack)
 - C#
-- .NET 9
+- .NET 10
 - [Avalonia UI](https://avaloniaui.net/)
 
 ## 特徴(Features)
