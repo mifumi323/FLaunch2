@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:FLaunch2.Views"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" Width="300" Height="300"
         x:Class="FLaunch2.Views.MainWindow"
         Icon="/Assets/FLaunch.ico"
+        ShowInTaskbar="False"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        Padding="1"
         Title="FLaunch2">
-        <views:MainView />
+    <views:MainView />
 </Window>

@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:FLaunch2.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="FLaunch2.Views.MainView"
              x:DataType="vm:MainViewModel">
   <Design.DataContext>
@@ -13,6 +13,10 @@
   </Design.DataContext>
 
   <Grid>
+    <Grid.ColumnDefinitions>
+	  <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
@@ -42,10 +46,10 @@
         <Separator/>
         <MenuItem Header="終了(_E)"/>
       </MenuItem>
-      <ComboBox Width="200" Margin="5">
-       </ComboBox>
     </Menu>
-    <ItemsControl Grid.Row="1">
+    <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
+    </ComboBox>
+    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2">
       <ItemsControl.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
