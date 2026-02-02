@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11205.157 d18.0
+VisualStudioVersion = 18.0.11205.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLaunch2", "FLaunch2\FLaunch2.csproj", "{1621FF65-0BF8-E742-A748-ECD0FAB27762}"
 EndProject
@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLaunch2.Core", "FLaunch2.Core\FLaunch2.Core.csproj", "{77F89B88-321F-43A8-9629-3826475CDC93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLaunch2.Infrastructure", "FLaunch2.Infrastructure\FLaunch2.Infrastructure.csproj", "{2181BB6E-61DC-4574-AF01-ABE6BA8B2A89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{95CEB8C1-6DD1-BF97-B0DC-9F35BDD1AA3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95CEB8C1-6DD1-BF97-B0DC-9F35BDD1AA3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95CEB8C1-6DD1-BF97-B0DC-9F35BDD1AA3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F89B88-321F-43A8-9629-3826475CDC93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F89B88-321F-43A8-9629-3826475CDC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F89B88-321F-43A8-9629-3826475CDC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F89B88-321F-43A8-9629-3826475CDC93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2181BB6E-61DC-4574-AF01-ABE6BA8B2A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2181BB6E-61DC-4574-AF01-ABE6BA8B2A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2181BB6E-61DC-4574-AF01-ABE6BA8B2A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2181BB6E-61DC-4574-AF01-ABE6BA8B2A89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
