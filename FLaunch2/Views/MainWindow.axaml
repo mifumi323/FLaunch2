@@ -48,7 +48,7 @@
         <Separator/>
         <MenuItem Header="取扱説明書(_H)"/>
         <Separator/>
-        <MenuItem Header="終了(_E)"/>
+        <MenuItem Header="終了(_E)" Click="OnExitClicked"/>
       </MenuItem>
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
