@@ -3,14 +3,65 @@
         xmlns:vm="using:FLaunch2.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:FLaunch2.Views"
         mc:Ignorable="d" Width="300" Height="300"
         x:Class="FLaunch2.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
         Icon="/Assets/FLaunch.ico"
         ShowInTaskbar="False"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         Padding="1"
         Title="FLaunch2">
-    <views:MainView />
+  <Design.DataContext>
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Menu>
+      <MenuItem Header="浮き沈みランチャー">
+        <MenuItem Header="スコアで並べ替え"/>
+        <MenuItem Header="利用日時で並べ替え"/>
+        <MenuItem Header="名前で並べ替え"/>
+        <MenuItem Header="ファイル名で並べ替え"/>
+        <Separator/>
+        <MenuItem Header="オプション(_O)">
+          <MenuItem Header="環境変数の展開(_E)"/>
+        </MenuItem>
+        <MenuItem Header="データ管理(_D)">
+          <MenuItem Header="追加(_A)"/>
+          <Separator/>
+          <MenuItem Header="リストをエクスポート(_E)"/>
+          <MenuItem Header="リストをインポート(_I)"/>
+          <Separator/>
+          <MenuItem Header="データを消して終了"/>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="バージョン情報(_A)"/>
+        <Separator/>
+        <MenuItem Header="取扱説明書(_H)"/>
+        <Separator/>
+        <MenuItem Header="終了(_E)"/>
+      </MenuItem>
+    </Menu>
+    <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
+    </ComboBox>
+    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="5" />
+            <TextBlock Margin="5" />
+          </StackPanel>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </Grid>
 </Window>
