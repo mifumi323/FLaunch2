@@ -11,6 +11,7 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         Padding="1"
+        Topmost="True"
         Title="FLaunch2">
   <Design.DataContext>
     <vm:MainViewModel />

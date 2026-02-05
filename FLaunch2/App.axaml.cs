@@ -40,6 +40,7 @@ public partial class App : Application
         {
             if (desktop.MainWindow is MainWindow mainWindow)
             {
+                mainWindow.Locate();
                 mainWindow.Show();
                 mainWindow.Activate();
             }
