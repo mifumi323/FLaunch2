@@ -29,32 +29,33 @@ public partial class WindowLocator
 
         var screen = window.Screens.ScreenFromPoint(mousePos);
         if (screen == null) return;
+        var scaling = screen.Scaling;
 
         var screenRect = screen.WorkingArea;
         var windowFrameSize = window.FrameSize.GetValueOrDefault();
+        var windowFramePixelSize = PixelSize.FromSize(windowFrameSize, scaling);
 
         // ウィンドウサイズをスクリーンサイズに制限
-        var newWidth = Math.Min(windowFrameSize.Width, screenRect.Width);
-        var newHeight = Math.Min(windowFrameSize.Height, screenRect.Height);
-        var scaling = screen.Scaling;
-        if (newWidth != windowFrameSize.Width || newHeight != windowFrameSize.Height)
+        var newPixelWidth = Math.Min(windowFramePixelSize.Width, screenRect.Width);
+        var newPixelHeight = Math.Min(windowFramePixelSize.Height, screenRect.Height);
+        if (newPixelWidth != windowFrameSize.Width || newPixelHeight != windowFrameSize.Height)
         {
-            window.Width = newWidth / scaling;
-            window.Height = newHeight / scaling;
-            windowFrameSize = new PixelSize((int)newWidth, (int)newHeight).ToSizeWithDpi(scaling);
+            window.Width = newPixelWidth / scaling;
+            window.Height = newPixelHeight / scaling;
+            windowFramePixelSize = new PixelSize(newPixelWidth, newPixelHeight);
         }
 
         var positions = new[]
         {
             new PixelPoint(mousePos.X, mousePos.Y),
-            new PixelPoint(mousePos.X - (int)windowFrameSize.Width, mousePos.Y),
-            new PixelPoint(mousePos.X, mousePos.Y - (int)windowFrameSize.Height),
-            new PixelPoint(mousePos.X - (int)windowFrameSize.Width, mousePos.Y - (int)windowFrameSize.Height)
+            new PixelPoint(mousePos.X - windowFramePixelSize.Width, mousePos.Y),
+            new PixelPoint(mousePos.X, mousePos.Y - windowFramePixelSize.Height),
+            new PixelPoint(mousePos.X - windowFramePixelSize.Width, mousePos.Y - windowFramePixelSize.Height)
         };
 
         foreach (var pos in positions)
         {
-            var windowRect = new PixelRect(pos, PixelSize.FromSize(windowFrameSize, scaling));
+            var windowRect = new PixelRect(pos, windowFramePixelSize);
             if (screenRect.Contains(windowRect))
             {
                 window.Position = pos;
@@ -64,12 +65,12 @@ public partial class WindowLocator
 
         // どの隅も収まらない場合、スクリーンに収まるように調整
         var finalPos = positions[0];
-        if (finalPos.X + windowFrameSize.Width > screenRect.Right)
-            finalPos = finalPos.WithX((int)screenRect.Right - (int)windowFrameSize.Width);
+        if (finalPos.X + windowFramePixelSize.Width > screenRect.Right)
+            finalPos = finalPos.WithX((int)screenRect.Right - (int)windowFramePixelSize.Width);
         if (finalPos.X < screenRect.X)
             finalPos = finalPos.WithX(screenRect.X);
-        if (finalPos.Y + windowFrameSize.Height > screenRect.Bottom)
-            finalPos = finalPos.WithY((int)screenRect.Bottom - (int)windowFrameSize.Height);
+        if (finalPos.Y + windowFramePixelSize.Height > screenRect.Bottom)
+            finalPos = finalPos.WithY((int)screenRect.Bottom - (int)windowFramePixelSize.Height);
         if (finalPos.Y < screenRect.Y)
             finalPos = finalPos.WithY(screenRect.Y);
 
