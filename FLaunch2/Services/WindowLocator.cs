@@ -44,36 +44,18 @@ public partial class WindowLocator
             window.Height = newPixelHeight / scaling;
             windowFramePixelSize = new PixelSize(newPixelWidth, newPixelHeight);
         }
+        window.MaxWidth = screenRect.Width / scaling;
+        window.MaxHeight = screenRect.Height / scaling;
 
-        var positions = new[]
-        {
-            new PixelPoint(mousePos.X, mousePos.Y),
-            new PixelPoint(mousePos.X - windowFramePixelSize.Width, mousePos.Y),
-            new PixelPoint(mousePos.X, mousePos.Y - windowFramePixelSize.Height),
-            new PixelPoint(mousePos.X - windowFramePixelSize.Width, mousePos.Y - windowFramePixelSize.Height)
-        };
-
-        foreach (var pos in positions)
-        {
-            var windowRect = new PixelRect(pos, windowFramePixelSize);
-            if (screenRect.Contains(windowRect))
-            {
-                window.Position = pos;
-                return;
-            }
-        }
-
-        // どの隅も収まらない場合、スクリーンに収まるように調整
-        var finalPos = positions[0];
-        if (finalPos.X + windowFramePixelSize.Width > screenRect.Right)
-            finalPos = finalPos.WithX((int)screenRect.Right - (int)windowFramePixelSize.Width);
-        if (finalPos.X < screenRect.X)
-            finalPos = finalPos.WithX(screenRect.X);
-        if (finalPos.Y + windowFramePixelSize.Height > screenRect.Bottom)
-            finalPos = finalPos.WithY((int)screenRect.Bottom - (int)windowFramePixelSize.Height);
-        if (finalPos.Y < screenRect.Y)
-            finalPos = finalPos.WithY(screenRect.Y);
-
-        window.Position = finalPos;
+        // ウィンドウ位置調整(マウス位置基準に中央に向かって出てくるようにする)
+        var centerScreenX = screenRect.X + screenRect.Width / 2;
+        var centerScreenY = screenRect.Y + screenRect.Height / 2;
+        var newPixelX = mousePos.X <= centerScreenX
+            ? Math.Min(mousePos.X, screenRect.Right - windowFramePixelSize.Width)
+            : Math.Max(mousePos.X - windowFramePixelSize.Width, screenRect.X);
+        var newPixelY = mousePos.Y <= centerScreenY
+            ? Math.Min(mousePos.Y, screenRect.Bottom - windowFramePixelSize.Height)
+            : Math.Max(mousePos.Y - windowFramePixelSize.Height, screenRect.Y);
+        window.Position = new PixelPoint(newPixelX, newPixelY);
     }
 }
