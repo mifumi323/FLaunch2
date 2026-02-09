@@ -14,7 +14,6 @@ public partial class MainWindow : Window
         Deactivated += OnDeactivated;
     }
 
-    // 既存のAPIを保ちつつ内部で委譲
     public void Locate()
     {
         _windowLocator.Locate(this);
