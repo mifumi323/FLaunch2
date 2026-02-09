@@ -31,7 +31,7 @@ public partial class WindowLocator
         if (screen == null) return;
         var scaling = screen.Scaling;
 
-        var screenRect = screen.WorkingArea;
+        var screenRect = screen.Bounds;
         var windowFrameSize = window.FrameSize.GetValueOrDefault();
         var windowFramePixelSize = PixelSize.FromSize(windowFrameSize, scaling);
 
