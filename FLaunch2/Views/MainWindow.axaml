@@ -12,6 +12,8 @@
         ExtendClientAreaChromeHints="NoChrome"
         Padding="1"
         Topmost="True"
+        CanMaximize="False"
+        CanMinimize="False"
         Title="FLaunch2">
   <Design.DataContext>
     <vm:MainViewModel />
