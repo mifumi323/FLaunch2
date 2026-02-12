@@ -37,6 +37,15 @@ public partial class MainWindow : Window
         var item = new Item();
         var vm = new ItemEditViewModel(item, isNew: true);
 
+        vm.OkPressed += (_, _) =>
+        {
+            // Add the new item to the collection
+            if (DataContext is MainViewModel mainVm)
+            {
+                mainVm.AddItem(vm.ToItem());
+            }
+        };
+
         OpenItemEditWindow(vm);
     }
 
