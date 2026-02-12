@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using FLaunch2.Models;
 using ReactiveUI;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -46,6 +47,12 @@ public class ItemEditViewModel : ViewModelBase
 
     /// <summary>編集結果が確定されたかどうか</summary>
     public bool IsConfirmed { get; private set; }
+
+    /// <summary>OK が押されたときに発火するイベント</summary>
+    public event EventHandler? OkPressed;
+
+    /// <summary>キャンセルが押されたときに発火するイベント</summary>
+    public event EventHandler? CancelPressed;
 
     public string DisplayName
     {
@@ -116,12 +123,14 @@ public class ItemEditViewModel : ViewModelBase
     private void OnOk(Window window)
     {
         IsConfirmed = true;
+        OkPressed?.Invoke(this, EventArgs.Empty);
         window.Close();
     }
 
     private void OnCancel(Window window)
     {
         IsConfirmed = false;
+        CancelPressed?.Invoke(this, EventArgs.Empty);
         window.Close();
     }
 
