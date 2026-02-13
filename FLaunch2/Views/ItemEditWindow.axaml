@@ -1,0 +1,82 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:FLaunch2.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="624" d:DesignHeight="441"
+        x:Class="FLaunch2.Views.ItemEditWindow"
+        x:DataType="vm:ItemEditViewModel"
+        Icon="/Assets/FLaunch.ico"
+        Width="624" Height="441"
+        MinWidth="400" MinHeight="300"
+        CanMaximize="False"
+        Title="項目の編集">
+  <Design.DataContext>
+    <vm:ItemEditViewModel />
+  </Design.DataContext>
+
+  <DockPanel Margin="12">
+    <!-- 下部ボタン -->
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                HorizontalAlignment="Right" Margin="0,8,0,0" Spacing="8">
+      <Button Content="リンク解析" Command="{Binding ResolveLinkCommand}" />
+      <Panel Width="80" /> <!-- スペーサー -->
+      <Button Content="OK" Width="75" Command="{Binding OkCommand}"
+              CommandParameter="{Binding $parent[Window]}" />
+      <Button Content="キャンセル" Width="75" Command="{Binding CancelCommand}"
+              CommandParameter="{Binding $parent[Window]}" />
+    </StackPanel>
+
+    <!-- フォーム本体 -->
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto">
+      <!-- 表示名 -->
+      <Label Grid.Row="0" Grid.Column="0" Content="表示名(_N)" Target="txtName"
+             VerticalAlignment="Center" Margin="0,0,8,4" />
+      <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtName"
+               Text="{Binding DisplayName}" Margin="0,0,0,4" />
+
+      <!-- 実行ファイル -->
+      <Label Grid.Row="1" Grid.Column="0" Content="実行ファイル(_F)" Target="txtFile"
+             VerticalAlignment="Center" Margin="0,0,8,4" />
+      <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtFile"
+               Text="{Binding FilePath}" Margin="0,0,0,4" />
+
+      <!-- パラメータ引数 -->
+      <Label Grid.Row="2" Grid.Column="0" Content="パラメータ引数(_A)" Target="txtArguments"
+             VerticalAlignment="Center" Margin="0,0,8,4" />
+      <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtArguments"
+               Text="{Binding Arguments}" Margin="0,0,0,4" />
+
+      <!-- 作業フォルダ -->
+      <Label Grid.Row="3" Grid.Column="0" Content="作業フォルダ(_D)" Target="txtDir"
+             VerticalAlignment="Center" Margin="0,0,8,4" />
+      <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtDir"
+               Text="{Binding WorkingDirectory}" Margin="0,0,0,4" />
+
+      <!-- コメント -->
+      <Label Grid.Row="4" Grid.Column="0" Content="コメント(_C)" Target="txtComment"
+             VerticalAlignment="Center" Margin="0,0,8,4" />
+      <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtComment"
+               Text="{Binding Comment}" Margin="0,0,0,4" />
+
+      <!-- タグ -->
+      <Label Grid.Row="5" Grid.Column="0" Content="タグ(_T)"
+             VerticalAlignment="Top" Margin="0,4,8,4" />
+      <ListBox Grid.Row="5" Grid.Column="1"
+               ItemsSource="{Binding TagItems}" Margin="0,0,0,4"
+               SelectionMode="Multiple,Toggle">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:TagItemViewModel">
+            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <!-- 一覧にないタグ -->
+      <Label Grid.Row="6" Grid.Column="0" Content="一覧にないタグ(_G)" Target="txtNewTag"
+             VerticalAlignment="Center" Margin="0,0,8,0" />
+      <TextBox Grid.Row="6" Grid.Column="1" x:Name="txtNewTag"
+               Text="{Binding NewTag}" />
+    </Grid>
+  </DockPanel>
+</Window>
