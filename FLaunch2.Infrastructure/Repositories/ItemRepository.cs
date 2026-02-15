@@ -18,7 +18,7 @@ public class ItemRepository : IDisposable
 
     public ItemRepository()
     {
-        _database = new LiteDatabase(DataPathProvider.DatabasePath);
+        _database = new LiteDatabase($"Filename={DataPathProvider.DatabasePath};Connection=shared");
         _collection = _database.GetCollection<Item>("items");
 
         // スコアによるインデックスを作成（パフォーマンス向上のため）
