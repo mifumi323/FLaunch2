@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
+using System;
 
 namespace FLaunch2.Views;
 
@@ -64,5 +65,20 @@ public partial class MainWindow : Window
     private void Window_Closed(object? sender, System.EventArgs e)
     {
         _itemEditWindow?.Close();
+    }
+
+    internal void Display()
+    {
+        Locate();
+        Show();
+        Activate();
+    }
+
+    private void Window_Activated(object? sender, EventArgs e)
+    {
+        if (DataContext is MainViewModel mainVm)
+        {
+            mainVm.Load();
+        }
     }
 }

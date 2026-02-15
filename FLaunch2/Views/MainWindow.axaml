@@ -14,6 +14,7 @@
         Topmost="True"
         CanMaximize="False"
         CanMinimize="False"
+        Activated="Window_Activated"
         Closed="Window_Closed"
         Title="FLaunch2">
   <Design.DataContext>
@@ -57,12 +58,12 @@
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
     </ComboBox>
-    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2">
+    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}">
       <ItemsControl.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <Image Width="16" Height="16" Margin="5" />
-            <TextBlock Margin="5" />
+            <TextBlock Margin="5" Text="{Binding DisplayName}" />
           </StackPanel>
         </DataTemplate>
       </ItemsControl.ItemTemplate>
