@@ -14,6 +14,8 @@ namespace FLaunch2;
 
 public partial class App : Application
 {
+    private MainWindow? _mainWindow = null;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -45,16 +47,18 @@ public partial class App : Application
             }
             else
             {
-                // 通常起動
-                desktop.MainWindow = new MainWindow
+                // 通常起動（非表示で起動）
+                desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                _mainWindow = new MainWindow
                 {
                     DataContext = new MainViewModel(),
                 };
+                _mainWindow.Closed += (_, _) => desktop.Shutdown();
             }
 
             if (TrayIcon.GetIcons(this)?.FirstOrDefault() is TrayIcon trayIcon)
             {
-                if (desktop.MainWindow is MainWindow)
+                if (_mainWindow is not null)
                 {
                     trayIcon.Clicked += OnTrayIconClicked;
                 }
@@ -70,12 +74,6 @@ public partial class App : Application
 
     private void OnTrayIconClicked(object? sender, EventArgs e)
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            if (desktop.MainWindow is MainWindow mainWindow)
-            {
-                mainWindow.Display();
-            }
-        }
+        _mainWindow?.Display();
     }
 }
