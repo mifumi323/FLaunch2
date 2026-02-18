@@ -32,17 +32,16 @@ public partial class WindowLocator
         var scaling = screen.Scaling;
 
         var screenRect = screen.Bounds;
-        var windowFrameSize = window.FrameSize.GetValueOrDefault();
-        var windowFramePixelSize = PixelSize.FromSize(windowFrameSize, scaling);
+        var windowPixelWidth = window.Width * scaling;
+        var windowPixelHeight = window.Height * scaling;
 
         // ウィンドウサイズをスクリーンサイズに制限
-        var newPixelWidth = Math.Min(windowFramePixelSize.Width, screenRect.Width);
-        var newPixelHeight = Math.Min(windowFramePixelSize.Height, screenRect.Height);
-        if (newPixelWidth != windowFrameSize.Width || newPixelHeight != windowFrameSize.Height)
+        var newPixelWidth = Math.Min(windowPixelWidth, screenRect.Width);
+        var newPixelHeight = Math.Min(windowPixelHeight, screenRect.Height);
+        if (newPixelWidth != windowPixelWidth || newPixelHeight != windowPixelHeight)
         {
             window.Width = newPixelWidth / scaling;
             window.Height = newPixelHeight / scaling;
-            windowFramePixelSize = new PixelSize(newPixelWidth, newPixelHeight);
         }
         window.MaxWidth = screenRect.Width / scaling;
         window.MaxHeight = screenRect.Height / scaling;
@@ -51,11 +50,11 @@ public partial class WindowLocator
         var centerScreenX = screenRect.X + screenRect.Width / 2;
         var centerScreenY = screenRect.Y + screenRect.Height / 2;
         var newPixelX = mousePos.X <= centerScreenX
-            ? Math.Min(mousePos.X, screenRect.Right - windowFramePixelSize.Width)
-            : Math.Max(mousePos.X - windowFramePixelSize.Width, screenRect.X);
+            ? Math.Min(mousePos.X, screenRect.Right - newPixelWidth)
+            : Math.Max(mousePos.X - newPixelWidth, screenRect.X);
         var newPixelY = mousePos.Y <= centerScreenY
-            ? Math.Min(mousePos.Y, screenRect.Bottom - windowFramePixelSize.Height)
-            : Math.Max(mousePos.Y - windowFramePixelSize.Height, screenRect.Y);
-        window.Position = new PixelPoint(newPixelX, newPixelY);
+            ? Math.Min(mousePos.Y, screenRect.Bottom - newPixelHeight)
+            : Math.Max(mousePos.Y - newPixelHeight, screenRect.Y);
+        window.Position = new PixelPoint((int)newPixelX, (int)newPixelY);
     }
 }
