@@ -81,4 +81,17 @@ public partial class MainWindow : Window
             mainVm.Load();
         }
     }
+
+    private void OnItemTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        if (sender is ListBox listBox && listBox.SelectedItem is Item item)
+        {
+            listBox.SelectedItem = null;
+
+            if (DataContext is MainViewModel mainVm)
+            {
+                mainVm.ExecuteItem(item);
+            }
+        }
+    }
 }

@@ -58,7 +58,8 @@
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
     </ComboBox>
-    <ListBox Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}">
+    <ListBox Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}"
+             Tapped="OnItemTapped">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
