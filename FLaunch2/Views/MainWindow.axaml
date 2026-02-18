@@ -58,15 +58,16 @@
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
     </ComboBox>
-    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}">
-      <ItemsControl.ItemTemplate>
+    <ListBox Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}"
+             Tapped="OnItemTapped">
+      <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <Image Width="16" Height="16" Margin="5" />
             <TextBlock Margin="5" Text="{Binding DisplayName}" />
           </StackPanel>
         </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </Grid>
 </Window>
