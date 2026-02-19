@@ -1,9 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace FLaunch2.Views;
 
@@ -93,5 +97,100 @@ public partial class MainWindow : Window
                 mainVm.ExecuteItem(item);
             }
         }
+    }
+
+    private void OnContextMenuOpened(object? sender, RoutedEventArgs e)
+    {
+        if (sender is ContextMenu contextMenu &&
+            contextMenu.PlacementTarget is ListBoxItem listBoxItem)
+        {
+            ItemListBox.SelectedItem = listBoxItem.DataContext;
+        }
+    }
+
+    private Item? GetSelectedItem()
+    {
+        return ItemListBox.SelectedItem as Item;
+    }
+
+    private void OnContextExecuteClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.ExecuteItem(item);
+        }
+    }
+
+    private void OnContextRunAsAdminClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.ExecuteItem(item, runas: true);
+        }
+    }
+
+    private void OnContextOpenWorkingDirClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && !string.IsNullOrWhiteSpace(item.WorkingDirectory))
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = item.WorkingDirectory,
+                UseShellExecute = true,
+            });
+        }
+    }
+
+    private void OnContextOpenFileLocationClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && !string.IsNullOrWhiteSpace(item.FilePath))
+        {
+            var dir = Path.GetDirectoryName(item.FilePath);
+            if (!string.IsNullOrWhiteSpace(dir))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = dir,
+                    UseShellExecute = true,
+                });
+            }
+        }
+    }
+
+    private void OnContextDuplicateClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.DuplicateItem(item);
+        }
+    }
+
+    private void OnContextDeleteClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.DeleteItem(item);
+        }
+    }
+
+    private void OnContextPropertiesClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item)
+        {
+            var vm = new ItemEditViewModel(item, isNew: false);
+            vm.OkPressed += (_, _) =>
+            {
+                if (DataContext is MainViewModel mainVm)
+                {
+                    mainVm.UpdateItem(vm.ToItem());
+                }
+            };
+            OpenItemEditWindow(vm);
+        }
+    }
+
+    private void OnContextTagClicked(object? sender, RoutedEventArgs e)
+    {
+        // TODO: タグ編集機能を実装
     }
 }
