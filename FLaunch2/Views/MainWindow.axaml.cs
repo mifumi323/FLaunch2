@@ -1,13 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace FLaunch2.Views;
 
@@ -131,29 +127,17 @@ public partial class MainWindow : Window
 
     private void OnContextOpenWorkingDirClicked(object? sender, RoutedEventArgs e)
     {
-        if (GetSelectedItem() is { } item && !string.IsNullOrWhiteSpace(item.WorkingDirectory))
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = item.WorkingDirectory,
-                UseShellExecute = true,
-            });
+            mainVm.OpenWorkingDirectory(item);
         }
     }
 
     private void OnContextOpenFileLocationClicked(object? sender, RoutedEventArgs e)
     {
-        if (GetSelectedItem() is { } item && !string.IsNullOrWhiteSpace(item.FilePath))
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
-            var dir = Path.GetDirectoryName(item.FilePath);
-            if (!string.IsNullOrWhiteSpace(dir))
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = dir,
-                    UseShellExecute = true,
-                });
-            }
+            mainVm.OpenFileLocation(item);
         }
     }
 

@@ -4,6 +4,7 @@ using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 
 namespace FLaunch2.ViewModels;
 
@@ -92,6 +93,34 @@ public class MainViewModel : ViewModelBase
         if (index >= 0)
         {
             Items[index] = item;
+        }
+    }
+
+    internal void OpenWorkingDirectory(Item item)
+    {
+        if (string.IsNullOrWhiteSpace(item.WorkingDirectory))
+            return;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = item.WorkingDirectory,
+            UseShellExecute = true,
+        });
+    }
+
+    internal void OpenFileLocation(Item item)
+    {
+        if (string.IsNullOrWhiteSpace(item.FilePath))
+            return;
+
+        var dir = Path.GetDirectoryName(item.FilePath);
+        if (!string.IsNullOrWhiteSpace(dir))
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = dir,
+                UseShellExecute = true,
+            });
         }
     }
 }
