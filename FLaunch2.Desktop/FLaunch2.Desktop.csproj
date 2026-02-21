@@ -9,7 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\FLaunch2\Assets\FLaunch.ico</ApplicationIcon>
     <AssemblyName>FLaunch</AssemblyName>
-    <Copyright>Copyright (C) 2025 Mifumi Matsuda</Copyright>
+    <Copyright>Copyright (C) 2025-2026 Mifumi Matsuda</Copyright>
     <RepositoryUrl>https://github.com/mifumi323/FLaunch2</RepositoryUrl>
     <VersionPrefix>2.0.0</VersionPrefix>
     <Description>最近良く使う項目ほど上に来るタスクトレイ常駐型ランチャー</Description>
