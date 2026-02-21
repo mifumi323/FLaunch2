@@ -43,7 +43,8 @@ public partial class MainWindow : Window
             // Add the new item to the collection
             if (DataContext is MainViewModel mainVm)
             {
-                mainVm.AddItem(vm.ToItem());
+                vm.ApplyTo(item);
+                mainVm.AddItem(item);
             }
         };
 
@@ -93,5 +94,89 @@ public partial class MainWindow : Window
                 mainVm.ExecuteItem(item);
             }
         }
+    }
+
+    private void OnContextMenuOpened(object? sender, RoutedEventArgs e)
+    {
+        if (sender is ContextMenu contextMenu &&
+            contextMenu.PlacementTarget is ListBoxItem listBoxItem)
+        {
+            ItemListBox.SelectedItem = listBoxItem.DataContext;
+        }
+    }
+
+    private Item? GetSelectedItem()
+    {
+        return ItemListBox.SelectedItem as Item;
+    }
+
+    private void OnContextExecuteClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.ExecuteItem(item);
+        }
+    }
+
+    private void OnContextRunAsAdminClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.ExecuteItem(item, runas: true);
+        }
+    }
+
+    private void OnContextOpenWorkingDirClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.OpenWorkingDirectory(item);
+        }
+    }
+
+    private void OnContextOpenFileLocationClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.OpenFileLocation(item);
+        }
+    }
+
+    private void OnContextDuplicateClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.DuplicateItem(item);
+        }
+    }
+
+    private void OnContextDeleteClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        {
+            mainVm.DeleteItem(item);
+        }
+    }
+
+    private void OnContextPropertiesClicked(object? sender, RoutedEventArgs e)
+    {
+        if (GetSelectedItem() is { } item)
+        {
+            var vm = new ItemEditViewModel(item, isNew: false);
+            vm.OkPressed += (_, _) =>
+            {
+                if (DataContext is MainViewModel mainVm)
+                {
+                    vm.ApplyTo(item);
+                    mainVm.UpdateItem(item);
+                }
+            };
+            OpenItemEditWindow(vm);
+        }
+    }
+
+    private void OnContextTagClicked(object? sender, RoutedEventArgs e)
+    {
+        // TODO: タグ編集機能を実装
     }
 }

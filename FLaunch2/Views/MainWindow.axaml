@@ -58,8 +58,28 @@
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
     </ComboBox>
-    <ListBox Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}"
+    <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}"
              Tapped="OnItemTapped">
+      <ListBox.Styles>
+        <Style Selector="ListBoxItem">
+          <Setter Property="ContextMenu">
+            <Setter.Value>
+              <ContextMenu Opened="OnContextMenuOpened">
+                <MenuItem Header="実行(_E)" Click="OnContextExecuteClicked"/>
+                <MenuItem Header="管理者として実行(_A)" Click="OnContextRunAsAdminClicked"/>
+                <MenuItem Header="作業フォルダを開く(_W)" Click="OnContextOpenWorkingDirClicked"/>
+                <MenuItem Header="ファイルの場所を開く(_I)" Click="OnContextOpenFileLocationClicked"/>
+                <Separator/>
+                <MenuItem Header="複製(_C)" Click="OnContextDuplicateClicked"/>
+                <MenuItem Header="削除(_D)" Click="OnContextDeleteClicked"/>
+                <Separator/>
+                <MenuItem Header="プロパティ(_R)" Click="OnContextPropertiesClicked"/>
+                <MenuItem Header="タグ(_T)" Click="OnContextTagClicked"/>
+              </ContextMenu>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </ListBox.Styles>
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">

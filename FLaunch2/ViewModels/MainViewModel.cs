@@ -4,6 +4,7 @@ using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 
 namespace FLaunch2.ViewModels;
 
@@ -27,7 +28,7 @@ public class MainViewModel : ViewModelBase
         Items = new ObservableCollection<Item>(_repository.GetAll());
     }
 
-    internal void ExecuteItem(Item item)
+    internal void ExecuteItem(Item item, bool runas = false)
     {
         if (string.IsNullOrWhiteSpace(item.FilePath))
             return;
@@ -43,11 +44,69 @@ public class MainViewModel : ViewModelBase
                     : item.WorkingDirectory,
                 UseShellExecute = true,
             };
+            if (runas)
+            {
+                psi.Verb = "runas";
+            }
             Process.Start(psi);
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine(ex.Message);
+        }
+    }
+
+    internal void DuplicateItem(Item item)
+    {
+        var clone = new Item
+        {
+            DisplayName = item.DisplayName,
+            FilePath = item.FilePath,
+            WorkingDirectory = item.WorkingDirectory,
+            Arguments = item.Arguments,
+            Comment = item.Comment,
+            Tags = [.. item.Tags],
+        };
+        _repository.Upsert(clone);
+        Items.Add(clone);
+    }
+
+    internal void DeleteItem(Item item)
+    {
+        _repository.Delete(item.Id);
+        Items.Remove(item);
+    }
+
+    internal void UpdateItem(Item item)
+    {
+        _repository.Upsert(item);
+    }
+
+    internal void OpenWorkingDirectory(Item item)
+    {
+        if (string.IsNullOrWhiteSpace(item.WorkingDirectory))
+            return;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = item.WorkingDirectory,
+            UseShellExecute = true,
+        });
+    }
+
+    internal void OpenFileLocation(Item item)
+    {
+        if (string.IsNullOrWhiteSpace(item.FilePath))
+            return;
+
+        var dir = Path.GetDirectoryName(item.FilePath);
+        if (!string.IsNullOrWhiteSpace(dir))
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = dir,
+                UseShellExecute = true,
+            });
         }
     }
 }

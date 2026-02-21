@@ -27,7 +27,6 @@ public class ItemEditViewModel : ViewModelBase
     public ItemEditViewModel(Item item, bool isNew) : this()
     {
         IsNew = isNew;
-        OriginalItem = item;
 
         DisplayName = item.DisplayName;
         FilePath = item.FilePath;
@@ -43,7 +42,6 @@ public class ItemEditViewModel : ViewModelBase
     }
 
     public bool IsNew { get; }
-    public Item? OriginalItem { get; }
 
     /// <summary>編集結果が確定されたかどうか</summary>
     public bool IsConfirmed { get; private set; }
@@ -96,10 +94,9 @@ public class ItemEditViewModel : ViewModelBase
     public ReactiveCommand<Window, Unit> CancelCommand { get; }
     public ReactiveCommand<Unit, Unit> ResolveLinkCommand { get; }
 
-    /// <summary>編集内容を Item に書き戻します</summary>
-    public Item ToItem()
+    /// <summary>編集内容を指定した Item に適用します</summary>
+    public void ApplyTo(Item item)
     {
-        var item = OriginalItem ?? new Item();
         item.DisplayName = DisplayName;
         item.FilePath = FilePath;
         item.Arguments = Arguments;
@@ -117,7 +114,6 @@ public class ItemEditViewModel : ViewModelBase
         }
 
         item.Tags = [.. tags.Distinct()];
-        return item;
     }
 
     private void OnOk(Window window)
