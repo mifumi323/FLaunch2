@@ -80,20 +80,6 @@ public class MainViewModel : ViewModelBase
     internal void UpdateItem(Item item)
     {
         _repository.Upsert(item);
-
-        var index = -1;
-        for (var i = 0; i < Items.Count; i++)
-        {
-            if (Items[i].Id == item.Id)
-            {
-                index = i;
-                break;
-            }
-        }
-        if (index >= 0)
-        {
-            Items[index] = item;
-        }
     }
 
     internal void OpenWorkingDirectory(Item item)

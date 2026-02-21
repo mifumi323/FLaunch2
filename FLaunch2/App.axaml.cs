@@ -38,7 +38,8 @@ public partial class App : Application
                 itemEditViewModel.OkPressed += (sender, e) =>
                 {
                     ItemRepository repository = new();
-                    repository.Upsert(itemEditViewModel.ToItem());
+                    itemEditViewModel.ApplyTo(item);
+                    repository.Upsert(item);
                 };
                 desktop.MainWindow = new ItemEditWindow
                 {

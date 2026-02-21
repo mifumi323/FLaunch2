@@ -43,7 +43,8 @@ public partial class MainWindow : Window
             // Add the new item to the collection
             if (DataContext is MainViewModel mainVm)
             {
-                mainVm.AddItem(vm.ToItem());
+                vm.ApplyTo(item);
+                mainVm.AddItem(item);
             }
         };
 
@@ -166,7 +167,8 @@ public partial class MainWindow : Window
             {
                 if (DataContext is MainViewModel mainVm)
                 {
-                    mainVm.UpdateItem(vm.ToItem());
+                    vm.ApplyTo(item);
+                    mainVm.UpdateItem(item);
                 }
             };
             OpenItemEditWindow(vm);
