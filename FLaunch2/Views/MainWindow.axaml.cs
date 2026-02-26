@@ -18,6 +18,26 @@ public partial class MainWindow : Window
         Deactivated += OnDeactivated;
     }
 
+    internal void LoadSettings()
+    {
+        if (DataContext is MainViewModel mainVm)
+        {
+            mainVm.LoadSettings();
+            Width = mainVm.Settings.WindowWidth;
+            Height = mainVm.Settings.WindowHeight;
+        }
+    }
+
+    private void SaveSettings()
+    {
+        if (DataContext is MainViewModel mainVm)
+        {
+            mainVm.Settings.WindowWidth = Width;
+            mainVm.Settings.WindowHeight = Height;
+            mainVm.SaveSettings();
+        }
+    }
+
     public void Locate()
     {
         _windowLocator.Locate(this);
@@ -66,6 +86,7 @@ public partial class MainWindow : Window
     private void Window_Closed(object? sender, System.EventArgs e)
     {
         _itemEditWindow?.Close();
+        SaveSettings();
     }
 
     internal void Display()

@@ -10,11 +10,17 @@ public class DataPathProvider
 {
     private const string AppFolderName = "FLaunch2";
     private const string DatabaseFileName = "items.db";
+    private const string SettingsFileName = "settings.json";
 
     /// <summary>
     /// データベースファイルのパスを取得します
     /// </summary>
     public static string DatabasePath => Path.Combine(AppDataFolder, DatabaseFileName);
+
+    /// <summary>
+    /// 設定ファイルのパスを取得します
+    /// </summary>
+    public static string SettingsPath => Path.Combine(AppDataFolder, SettingsFileName);
 
     /// <summary>
     /// アプリケーションデータフォルダのパスを取得します
