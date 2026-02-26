@@ -54,6 +54,7 @@ public partial class App : Application
                 {
                     DataContext = new MainViewModel(),
                 };
+                _mainWindow.LoadSettings();
                 _mainWindow.Closed += (_, _) => desktop.Shutdown();
             }
 

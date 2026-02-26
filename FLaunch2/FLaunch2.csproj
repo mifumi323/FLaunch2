@@ -12,6 +12,7 @@
     <Title>浮き沈みランチャー</Title>
     <Company>MifuminSoft</Company>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>FLaunch2.View</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

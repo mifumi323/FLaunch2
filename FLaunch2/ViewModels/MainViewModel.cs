@@ -11,6 +11,9 @@ namespace FLaunch2.ViewModels;
 public class MainViewModel : ViewModelBase
 {
     private readonly ItemRepository _repository = new();
+    private readonly SettingsRepository _settingsRepository = new();
+
+    public AppSettings Settings { get; private set; } = new();
 
     public ObservableCollection<Item> Items
     {
@@ -26,6 +29,16 @@ public class MainViewModel : ViewModelBase
     internal void Load()
     {
         Items = new ObservableCollection<Item>(_repository.GetAll());
+    }
+
+    internal void LoadSettings()
+    {
+        Settings = _settingsRepository.Load();
+    }
+
+    internal void SaveSettings()
+    {
+        _settingsRepository.Save(Settings);
     }
 
     internal void ExecuteItem(Item item, bool runas = false)
