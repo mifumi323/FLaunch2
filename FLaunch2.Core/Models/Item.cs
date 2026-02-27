@@ -15,6 +15,12 @@ namespace FLaunch2.Models
         public string Comment { get; set; } = string.Empty;
         public string[] Tags { get; set; } = [];
 
+        public void IncreaseScore(ICollection<Item> items, double scoreIncreaseRate)
+        {
+            var maxScore = items.Max(x => x.Score);
+            Score += Math.Max(maxScore * scoreIncreaseRate, double.Epsilon);
+        }
+
         public static double CalculateInitialScore(ICollection<Item> items, double initialScoreRate)
         {
             if (items.Count == 0)
