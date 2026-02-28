@@ -64,8 +64,14 @@ public class MainViewModel : ViewModelBase
             Process.Start(psi);
 
             item.LastExecuted = DateTimeOffset.Now;
-            item.IncreaseScore(Items, Settings.ScoreIncreaseRate);
-            UpdateItem(item);
+            if (item.IncreaseScore(Items, Settings.ScoreIncreaseRate))
+            {
+                UpdateItems(Items);
+            }
+            else
+            {
+                UpdateItem(item);
+            }
         }
         catch (Exception ex)
         {
@@ -97,6 +103,11 @@ public class MainViewModel : ViewModelBase
     internal void UpdateItem(Item item)
     {
         _repository.Upsert(item);
+    }
+
+    private void UpdateItems(ObservableCollection<Item> items)
+    {
+        _repository.UpsertMany(items);
     }
 
     internal void OpenWorkingDirectory(Item item)
