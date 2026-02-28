@@ -15,10 +15,30 @@ namespace FLaunch2.Models
         public string Comment { get; set; } = string.Empty;
         public string[] Tags { get; set; } = [];
 
-        public void IncreaseScore(ICollection<Item> items, double scoreIncreaseRate)
+        public bool IncreaseScore(ICollection<Item> items, double scoreIncreaseRate)
         {
             var maxScore = items.Max(x => x.Score);
-            Score += Math.Max(maxScore * scoreIncreaseRate, double.Epsilon);
+            double delta = Math.Max(maxScore * scoreIncreaseRate, double.Epsilon);
+            if (Score > double.MaxValue - delta)
+            {
+                var i = 0;
+                foreach (var item in items.OrderBy(x => x.Score).ToArray())
+                {
+                    i++;
+                    item.Score /= maxScore;
+                    if (item.Score <= 0)
+                    {
+                        item.Score = i * double.Epsilon;
+                    }
+                }
+                Score += scoreIncreaseRate;
+                return true;
+            }
+            else
+            {
+                Score += delta;
+                return false;
+            }
         }
 
         public static double CalculateInitialScore(ICollection<Item> items, double initialScoreRate)
