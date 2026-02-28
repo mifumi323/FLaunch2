@@ -29,17 +29,21 @@ public partial class App : Application
             if (!string.IsNullOrEmpty(filePath))
             {
                 // コマンドライン引数がある場合は編集ダイアログで追加
+                ItemRepository itemRepository = new();
+                var allItems = itemRepository.GetAll().ToList();
+                SettingsRepository settingsRepository = new();
+                var settings = settingsRepository.Load();
                 var item = new Item
                 {
                     FilePath = filePath,
                     DisplayName = Path.GetFileNameWithoutExtension(filePath),
+                    Score = Item.CalculateInitialScore(allItems, settings.InitialScoreRate),
                 };
                 ItemEditViewModel itemEditViewModel = new(item, isNew: true);
                 itemEditViewModel.OkPressed += (sender, e) =>
                 {
-                    ItemRepository repository = new();
                     itemEditViewModel.ApplyTo(item);
-                    repository.Upsert(item);
+                    itemRepository.Upsert(item);
                 };
                 desktop.MainWindow = new ItemEditWindow
                 {

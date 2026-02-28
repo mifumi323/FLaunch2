@@ -62,6 +62,10 @@ public class MainViewModel : ViewModelBase
                 psi.Verb = "runas";
             }
             Process.Start(psi);
+
+            item.LastExecuted = DateTimeOffset.Now;
+            item.IncreaseScore(Items, Settings.ScoreIncreaseRate);
+            UpdateItem(item);
         }
         catch (Exception ex)
         {

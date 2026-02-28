@@ -55,17 +55,22 @@ public partial class MainWindow : Window
 
     private async void OnAddClicked(object? sender, RoutedEventArgs e)
     {
-        var item = new Item();
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var item = new Item()
+        {
+            Score = Item.CalculateInitialScore(mainVm.Items, mainVm.Settings.InitialScoreRate),
+        };
         var vm = new ItemEditViewModel(item, isNew: true);
 
         vm.OkPressed += (_, _) =>
         {
             // Add the new item to the collection
-            if (DataContext is MainViewModel mainVm)
-            {
-                vm.ApplyTo(item);
-                mainVm.AddItem(item);
-            }
+            vm.ApplyTo(item);
+            mainVm.AddItem(item);
         };
 
         OpenItemEditWindow(vm);

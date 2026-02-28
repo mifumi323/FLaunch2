@@ -14,4 +14,14 @@ public class AppSettings
     /// ウィンドウの高さ
     /// </summary>
     public double WindowHeight { get; set; } = 300;
+
+    /// <summary>
+    /// 初期スコア係数(既存スコアの最大値に対する倍率)
+    /// </summary>
+    public double InitialScoreRate { get; set; } = 0.1;
+
+    /// <summary>
+    /// スコア増加係数(実行後のスコア増加量に対する倍率)
+    /// </summary>
+    public double ScoreIncreaseRate { get; set; } = 0.1;
 }
