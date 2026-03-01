@@ -2,9 +2,11 @@
 using FLaunch2.Repositories;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace FLaunch2.ViewModels;
 
@@ -19,6 +21,31 @@ public class MainViewModel : ViewModelBase
     {
         get; private set => this.RaiseAndSetIfChanged(ref field, value);
     } = [];
+
+    public IEnumerable<Item> DisplayItems
+    {
+        get; private set => this.RaiseAndSetIfChanged(ref field, value);
+    } = [];
+
+    public MainViewModel()
+    {
+        PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(Items) || e.PropertyName == nameof(Settings))
+            {
+                UpdateDiaplayItems();
+            }
+        };
+    }
+
+    private void UpdateDiaplayItems()
+    {
+        DisplayItems = [
+            .. Items
+            .OrderByDescending(x => x.Score)
+            .ThenByDescending(x => x.LastExecuted)
+        ];
+    }
 
     internal void AddItem(Item item)
     {

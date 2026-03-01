@@ -58,7 +58,7 @@
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
     </ComboBox>
-    <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}"
+    <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DisplayItems}"
              Tapped="OnItemTapped">
       <ListBox.Styles>
         <Style Selector="ListBoxItem">
