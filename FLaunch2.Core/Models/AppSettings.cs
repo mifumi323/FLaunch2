@@ -24,4 +24,9 @@ public class AppSettings
     /// スコア増加係数(実行後のスコア増加量に対する倍率)
     /// </summary>
     public double ScoreIncreaseRate { get; set; } = 0.1;
+
+    /// <summary>
+    /// 並べ替え順序
+    /// </summary>
+    public SortOrder SortOrder { get; set; } = SortOrder.Score;
 }

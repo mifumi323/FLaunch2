@@ -32,10 +32,10 @@
     </Grid.RowDefinitions>
     <Menu>
       <MenuItem Header="浮き沈みランチャー">
-        <MenuItem Header="スコアで並べ替え"/>
-        <MenuItem Header="利用日時で並べ替え"/>
-        <MenuItem Header="名前で並べ替え"/>
-        <MenuItem Header="ファイル名で並べ替え"/>
+        <MenuItem Header="スコアで並べ替え" Click="OnSortByScoreClicked"/>
+        <MenuItem Header="利用日時で並べ替え" Click="OnSortByLastExecutedClicked"/>
+        <MenuItem Header="名前で並べ替え" Click="OnSortByDisplayNameClicked"/>
+        <MenuItem Header="ファイル名で並べ替え" Click="OnSortByFilePathClicked"/>
         <Separator/>
         <MenuItem Header="オプション(_O)">
           <MenuItem Header="環境変数の展開(_E)"/>
@@ -58,7 +58,7 @@
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6">
     </ComboBox>
-    <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Items}"
+    <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DisplayItems}"
              Tapped="OnItemTapped">
       <ListBox.Styles>
         <Style Selector="ListBoxItem">
