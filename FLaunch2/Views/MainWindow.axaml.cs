@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
@@ -204,5 +206,33 @@ public partial class MainWindow : Window
     private void OnContextTagClicked(object? sender, RoutedEventArgs e)
     {
         // TODO: タグ編集機能を実装
+    }
+
+    private void OnSortByScoreClicked(object? sender, RoutedEventArgs e)
+    {
+        SetSortOrder(SortOrder.Score);
+    }
+
+    private void OnSortByLastExecutedClicked(object? sender, RoutedEventArgs e)
+    {
+        SetSortOrder(SortOrder.LastExecuted);
+    }
+
+    private void OnSortByDisplayNameClicked(object? sender, RoutedEventArgs e)
+    {
+        SetSortOrder(SortOrder.DisplayName);
+    }
+
+    private void OnSortByFilePathClicked(object? sender, RoutedEventArgs e)
+    {
+        SetSortOrder(SortOrder.FilePath);
+    }
+
+    private void SetSortOrder(SortOrder sortOrder)
+    {
+        if (DataContext is MainViewModel mainVm)
+        {
+            mainVm.SetSortOrder(sortOrder);
+        }
     }
 }

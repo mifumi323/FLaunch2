@@ -40,11 +40,20 @@ public class MainViewModel : ViewModelBase
 
     private void UpdateDiaplayItems()
     {
-        DisplayItems = [
-            .. Items
-            .OrderByDescending(x => x.Score)
-            .ThenByDescending(x => x.LastExecuted)
-        ];
+        IEnumerable<Item> sorted = Settings.SortOrder switch
+        {
+            SortOrder.LastExecuted => Items.OrderByDescending(x => x.LastExecuted).ThenByDescending(x => x.Score),
+            SortOrder.DisplayName => Items.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase),
+            SortOrder.FilePath => Items.OrderBy(x => x.FilePath, StringComparer.CurrentCultureIgnoreCase),
+            _ => Items.OrderByDescending(x => x.Score).ThenByDescending(x => x.LastExecuted),
+        };
+        DisplayItems = [.. sorted];
+    }
+
+    internal void SetSortOrder(SortOrder sortOrder)
+    {
+        Settings.SortOrder = sortOrder;
+        UpdateDiaplayItems();
     }
 
     internal void AddItem(Item item)
