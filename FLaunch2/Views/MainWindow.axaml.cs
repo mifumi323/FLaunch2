@@ -1,7 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
@@ -66,7 +64,7 @@ public partial class MainWindow : Window
         {
             Score = Item.CalculateInitialScore(mainVm.Items, mainVm.Settings.InitialScoreRate),
         };
-        var vm = new ItemEditViewModel(item, isNew: true);
+        var vm = new ItemEditViewModel(item, Item.GetAllTags(mainVm.Items), isNew: true);
 
         vm.OkPressed += (_, _) =>
         {
@@ -188,16 +186,17 @@ public partial class MainWindow : Window
 
     private void OnContextPropertiesClicked(object? sender, RoutedEventArgs e)
     {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
         if (GetSelectedItem() is { } item)
         {
-            var vm = new ItemEditViewModel(item, isNew: false);
+            var vm = new ItemEditViewModel(item, Item.GetAllTags(mainVm.Items), isNew: false);
             vm.OkPressed += (_, _) =>
             {
-                if (DataContext is MainViewModel mainVm)
-                {
-                    vm.ApplyTo(item);
-                    mainVm.UpdateItem(item);
-                }
+                vm.ApplyTo(item);
+                mainVm.UpdateItem(item);
             };
             OpenItemEditWindow(vm);
         }
