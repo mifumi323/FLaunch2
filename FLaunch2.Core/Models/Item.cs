@@ -50,5 +50,10 @@ namespace FLaunch2.Models
             var maxScore = items.Max(x => x.Score);
             return Math.Max(maxScore * initialScoreRate, double.Epsilon);
         }
+
+        public static IEnumerable<string> GetAllTags(IEnumerable<Item> items)
+        {
+            return items.SelectMany(x => x.Tags).Distinct();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using FLaunch2.Models;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -24,7 +25,7 @@ public class ItemEditViewModel : ViewModelBase
         ResolveLinkCommand = ReactiveCommand.Create(OnResolveLink);
     }
 
-    public ItemEditViewModel(Item item, bool isNew) : this()
+    public ItemEditViewModel(Item item, IEnumerable<string> allTags, bool isNew) : this()
     {
         IsNew = isNew;
 
@@ -34,10 +35,9 @@ public class ItemEditViewModel : ViewModelBase
         WorkingDirectory = item.WorkingDirectory;
         Comment = item.Comment;
 
-        // TODO: 既存タグ一覧をリポジトリから読み込んで TagItems を構築する
-        foreach (var tag in item.Tags)
+        foreach (var tag in allTags)
         {
-            TagItems.Add(new TagItemViewModel(tag, isChecked: true));
+            TagItems.Add(new TagItemViewModel(tag, isChecked: item.Tags.Contains(tag)));
         }
     }
 

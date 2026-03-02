@@ -39,7 +39,7 @@ public partial class App : Application
                     DisplayName = Path.GetFileNameWithoutExtension(filePath),
                     Score = Item.CalculateInitialScore(allItems, settings.InitialScoreRate),
                 };
-                ItemEditViewModel itemEditViewModel = new(item, isNew: true);
+                ItemEditViewModel itemEditViewModel = new(item, Item.GetAllTags(allItems), isNew: true);
                 itemEditViewModel.OkPressed += (sender, e) =>
                 {
                     itemEditViewModel.ApplyTo(item);
