@@ -22,7 +22,7 @@ public class MainViewModel : ViewModelBase
         get; private set => this.RaiseAndSetIfChanged(ref field, value);
     } = [];
 
-    public IEnumerable<Item> DisplayItems
+    public IEnumerable<ItemViewModel> DisplayItems
     {
         get; private set => this.RaiseAndSetIfChanged(ref field, value);
     } = [];
@@ -47,7 +47,7 @@ public class MainViewModel : ViewModelBase
             SortOrder.FilePath => Items.OrderBy(x => x.FilePath, StringComparer.CurrentCultureIgnoreCase),
             _ => Items.OrderByDescending(x => x.Score).ThenByDescending(x => x.LastExecuted),
         };
-        DisplayItems = [.. sorted];
+        DisplayItems = [.. sorted.Select(x => new ItemViewModel(x))];
     }
 
     internal void SetSortOrder(SortOrder sortOrder)

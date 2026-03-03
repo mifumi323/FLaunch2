@@ -111,13 +111,13 @@ public partial class MainWindow : Window
 
     private void OnItemTapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
-        if (sender is ListBox listBox && listBox.SelectedItem is Item item)
+        if (sender is ListBox listBox && listBox.SelectedItem is ItemViewModel itemVm)
         {
             listBox.SelectedItem = null;
 
             if (DataContext is MainViewModel mainVm)
             {
-                mainVm.ExecuteItem(item);
+                mainVm.ExecuteItem(itemVm.Item);
             }
         }
     }
@@ -133,7 +133,7 @@ public partial class MainWindow : Window
 
     private Item? GetSelectedItem()
     {
-        return ItemListBox.SelectedItem as Item;
+        return (ItemListBox.SelectedItem as ItemViewModel)?.Item;
     }
 
     private void OnContextExecuteClicked(object? sender, RoutedEventArgs e)
