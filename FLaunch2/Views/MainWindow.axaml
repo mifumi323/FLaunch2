@@ -81,9 +81,9 @@
         </Style>
       </ListBox.Styles>
       <ListBox.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate x:DataType="vm:ItemViewModel">
           <StackPanel Orientation="Horizontal">
-            <Image Width="16" Height="16" Margin="5" />
+            <Image Width="16" Height="16" Margin="5" Source="{Binding Icon}" />
             <TextBlock Margin="5" Text="{Binding DisplayName}" />
           </StackPanel>
         </DataTemplate>
