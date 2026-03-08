@@ -1,5 +1,6 @@
 ﻿using FLaunch2.Models;
 using FLaunch2.Repositories;
+using FLaunch2.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ public class MainViewModel : ViewModelBase
 {
     private readonly ItemRepository _repository = new();
     private readonly SettingsRepository _settingsRepository = new();
+    private readonly IIconExtractor _iconExtractor = new AssociatedIconExtractor();
 
     public AppSettings Settings { get; private set; } = new();
 
@@ -47,7 +49,7 @@ public class MainViewModel : ViewModelBase
             SortOrder.FilePath => Items.OrderBy(x => x.FilePath, StringComparer.CurrentCultureIgnoreCase),
             _ => Items.OrderByDescending(x => x.Score).ThenByDescending(x => x.LastExecuted),
         };
-        DisplayItems = [.. sorted.Select(x => new ItemViewModel(x))];
+        DisplayItems = [.. sorted.Select(x => new ItemViewModel(x, _iconExtractor))];
     }
 
     internal void SetSortOrder(SortOrder sortOrder)

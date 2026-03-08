@@ -1,8 +1,6 @@
-using Avalonia.Media.Imaging;
 using FLaunch2.Models;
+using FLaunch2.Services;
 using ReactiveUI;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Threading.Tasks;
 using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 
@@ -10,12 +8,14 @@ namespace FLaunch2.ViewModels;
 
 public class ItemViewModel : ViewModelBase
 {
+    private readonly IIconExtractor _iconExtractor;
     private AvaloniaBitmap? _icon;
     private bool _iconLoading;
 
-    public ItemViewModel(Item item)
+    public ItemViewModel(Item item, IIconExtractor iconExtractor)
     {
         Item = item;
+        _iconExtractor = iconExtractor;
     }
 
     public Item Item { get; }
@@ -38,30 +38,6 @@ public class ItemViewModel : ViewModelBase
 
     private async Task LoadIconAsync()
     {
-        var bitmap = await Task.Run(() => ExtractIcon(Item.FilePath));
-        Icon = bitmap;
-    }
-
-    private static AvaloniaBitmap? ExtractIcon(string filePath)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return null;
-
-            using var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
-            if (icon is null)
-                return null;
-
-            using var bmp = icon.ToBitmap();
-            using var ms = new MemoryStream();
-            bmp.Save(ms, ImageFormat.Png);
-            ms.Position = 0;
-            return new AvaloniaBitmap(ms);
-        }
-        catch
-        {
-            return null;
-        }
+        Icon = await _iconExtractor.ExtractIconAsync(Item.FilePath);
     }
 }
