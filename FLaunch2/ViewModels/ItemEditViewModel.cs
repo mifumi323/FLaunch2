@@ -132,7 +132,26 @@ public class ItemEditViewModel : ViewModelBase
 
     private void OnResolveLink()
     {
-        // TODO: .lnk ファイルを解析して FilePath, WorkingDirectory, Arguments を展開する
+        if (!FilePath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        try
+        {
+            var link = new Services.ShortcutLink(FilePath);
+            FilePath = link.TargetPath;
+            Arguments = link.Arguments;
+            WorkingDirectory = link.WorkingDirectory;
+            if (string.IsNullOrEmpty(Comment) && !string.IsNullOrEmpty(link.Description))
+            {
+                Comment = link.Description;
+            }
+        }
+        catch (Exception)
+        {
+            // 解析失敗時は何もしない
+        }
     }
 }
 
