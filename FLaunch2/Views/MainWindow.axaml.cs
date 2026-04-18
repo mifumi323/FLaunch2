@@ -11,6 +11,7 @@ public partial class MainWindow : Window
 {
     private readonly WindowLocator _windowLocator = new();
     private ItemEditWindow? _itemEditWindow;
+    private AboutWindow? _aboutWindow;
 
     public MainWindow()
     {
@@ -91,6 +92,7 @@ public partial class MainWindow : Window
     private void Window_Closed(object? sender, System.EventArgs e)
     {
         _itemEditWindow?.Close();
+        _aboutWindow?.Close();
         SaveSettings();
     }
 
@@ -205,6 +207,14 @@ public partial class MainWindow : Window
     private void OnContextTagClicked(object? sender, RoutedEventArgs e)
     {
         // TODO: タグ編集機能を実装
+    }
+
+    private void OnAboutClicked(object? sender, RoutedEventArgs e)
+    {
+        _aboutWindow?.Close();
+        _aboutWindow = new AboutWindow();
+        _aboutWindow.Closed += (_, _) => _aboutWindow = null;
+        _aboutWindow.Show();
     }
 
     private void OnSortByScoreClicked(object? sender, RoutedEventArgs e)
