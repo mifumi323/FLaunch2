@@ -15,6 +15,7 @@
     <Description>最近良く使う項目ほど上に来るタスクトレイ常駐型ランチャー</Description>
     <Title>浮き沈みランチャー</Title>
     <Company>MifuminSoft</Company>
+    <AssemblyTitle>浮き沈みランチャー</AssemblyTitle>
   </PropertyGroup>
 
   <ItemGroup>

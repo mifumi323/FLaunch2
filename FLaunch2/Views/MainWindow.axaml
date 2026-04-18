@@ -50,7 +50,7 @@
           <MenuItem Header="データを消して終了"/>
         </MenuItem>
         <Separator/>
-        <MenuItem Header="バージョン情報(_A)"/>
+        <MenuItem Header="バージョン情報(_A)" Click="OnAboutClicked"/>
         <Separator/>
         <MenuItem Header="取扱説明書(_H)"/>
         <Separator/>
