@@ -29,11 +29,16 @@ public class MainViewModel : ViewModelBase
         get; private set => this.RaiseAndSetIfChanged(ref field, value);
     } = [];
 
+    public string SearchText
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
+
     public MainViewModel()
     {
         PropertyChanged += (s, e) =>
         {
-            if (e.PropertyName == nameof(Items) || e.PropertyName == nameof(Settings))
+            if (e.PropertyName == nameof(Items) || e.PropertyName == nameof(Settings) || e.PropertyName == nameof(SearchText))
             {
                 UpdateDiaplayItems();
             }
@@ -42,12 +47,18 @@ public class MainViewModel : ViewModelBase
 
     private void UpdateDiaplayItems()
     {
+        IEnumerable<Item> items = Items.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var search = SearchText;
+            items = items.Where(x => MatchesSearch(x, search));
+        }
         IEnumerable<Item> sorted = Settings.SortOrder switch
         {
-            SortOrder.LastExecuted => Items.OrderByDescending(x => x.LastExecuted).ThenByDescending(x => x.Score),
-            SortOrder.DisplayName => Items.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase),
-            SortOrder.FilePath => Items.OrderBy(x => x.FilePath, StringComparer.CurrentCultureIgnoreCase),
-            _ => Items.OrderByDescending(x => x.Score).ThenByDescending(x => x.LastExecuted),
+            SortOrder.LastExecuted => items.OrderByDescending(x => x.LastExecuted).ThenByDescending(x => x.Score),
+            SortOrder.DisplayName => items.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase),
+            SortOrder.FilePath => items.OrderBy(x => x.FilePath, StringComparer.CurrentCultureIgnoreCase),
+            _ => items.OrderByDescending(x => x.Score).ThenByDescending(x => x.LastExecuted),
         };
         DisplayItems = [.. sorted.Select(x => new ItemViewModel(x, _iconExtractor))];
     }
@@ -56,6 +67,11 @@ public class MainViewModel : ViewModelBase
     {
         Settings.SortOrder = sortOrder;
         UpdateDiaplayItems();
+    }
+
+    private static bool MatchesSearch(Item item, string search)
+    {
+        return item.DisplayName?.Contains(search, StringComparison.CurrentCultureIgnoreCase) ?? false;
     }
 
     internal void AddItem(Item item)
