@@ -46,8 +46,8 @@
           <Separator/>
           <MenuItem Header="リストをエクスポート(_E)"/>
           <Separator/>
-          <MenuItem Header="ファイルからインポート(_I)"/>
-          <MenuItem Header="スタートメニューからインポート(_I)"/>
+          <MenuItem Header="ファイルからインポート(_F)"/>
+          <MenuItem Header="スタートメニューからインポート(_S)"/>
           <Separator/>
           <MenuItem Header="データを消して終了"/>
         </MenuItem>
