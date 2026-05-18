@@ -5,7 +5,6 @@ using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace FLaunch2.Views;
@@ -240,7 +239,25 @@ public partial class MainWindow : Window
 
         var items = FLaunch1Reader.ReadItems(filePath).ToArray();
 
-        // TODO: インポートダイアログ表示
+        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        var importWindow = new ImportWindow
+        {
+            DataContext = importVm,
+        };
+        importWindow.ImportClicked += ImportWindow_ImportClicked;
+
+        importWindow.Show();
+    }
+
+    private void ImportWindow_ImportClicked(object? sender, EventArgs e)
+    {
+        if (sender is ImportWindow importWindow && importWindow.DataContext is ImportViewModel importVm && DataContext is MainViewModel mainVm)
+        {
+            foreach (var item in importVm.SelectedItems)
+            {
+                mainVm.AddItem(item);
+            }
+        }
     }
 
     private void OnAboutClicked(object? sender, RoutedEventArgs e)
