@@ -1,9 +1,12 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace FLaunch2.Views;
 
@@ -207,6 +210,37 @@ public partial class MainWindow : Window
     private void OnContextTagClicked(object? sender, RoutedEventArgs e)
     {
         // TODO: タグ編集機能を実装
+    }
+
+    private async void OnImportFromFilesClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var storageProvider = StorageProvider;
+        var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "インポートするファイルを選択",
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("TSVファイル") { Patterns = ["*.tsv"] },
+                new FilePickerFileType("すべてのファイル") { Patterns = ["*"] },
+            ],
+        });
+
+        if (files == null || files.Count == 0)
+        {
+            return;
+        }
+
+        var filePath = files[0].Path.LocalPath;
+
+        var items = FLaunch1Reader.ReadItems(filePath).ToArray();
+
+        // TODO: インポートダイアログ表示
     }
 
     private void OnAboutClicked(object? sender, RoutedEventArgs e)
