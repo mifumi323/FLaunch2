@@ -14,6 +14,7 @@ public partial class MainWindow : Window
     private readonly WindowLocator _windowLocator = new();
     private ItemEditWindow? _itemEditWindow;
     private AboutWindow? _aboutWindow;
+    private ImportWindow? _importWindow;
 
     public MainWindow()
     {
@@ -95,6 +96,7 @@ public partial class MainWindow : Window
     {
         _itemEditWindow?.Close();
         _aboutWindow?.Close();
+        _importWindow?.Close();
         SaveSettings();
     }
 
@@ -240,13 +242,15 @@ public partial class MainWindow : Window
         var items = FLaunch1Reader.ReadItems(filePath).ToArray();
 
         var importVm = new ImportViewModel(items, mainVm.IconExtractor);
-        var importWindow = new ImportWindow
+        _importWindow?.Close();
+        _importWindow = new ImportWindow
         {
             DataContext = importVm,
         };
-        importWindow.ImportClicked += ImportWindow_ImportClicked;
+        _importWindow.ImportClicked += ImportWindow_ImportClicked;
+        _importWindow.Closed += (_, _) => _importWindow = null;
 
-        importWindow.Show();
+        _importWindow.Show();
     }
 
     private void ImportWindow_ImportClicked(object? sender, EventArgs e)
