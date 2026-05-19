@@ -153,6 +153,7 @@ public class MainViewModel : ViewModelBase
     {
         _repository.Delete(item.Id);
         Items.Remove(item);
+        UpdateDiaplayItems();
     }
 
     internal void UpdateItem(Item item)
