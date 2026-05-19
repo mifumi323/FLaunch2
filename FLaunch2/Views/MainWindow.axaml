@@ -45,7 +45,9 @@
           <MenuItem Header="追加(_A)" Click="OnAddClicked"/>
           <Separator/>
           <MenuItem Header="リストをエクスポート(_E)"/>
-          <MenuItem Header="リストをインポート(_I)"/>
+          <Separator/>
+          <MenuItem Header="ファイルからインポート(_F)" Click="OnImportFromFilesClicked"/>
+          <MenuItem Header="スタートメニューからインポート(_S)"/>
           <Separator/>
           <MenuItem Header="データを消して終了"/>
         </MenuItem>

@@ -1,9 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
 using System;
+using System.Linq;
 
 namespace FLaunch2.Views;
 
@@ -12,6 +14,7 @@ public partial class MainWindow : Window
     private readonly WindowLocator _windowLocator = new();
     private ItemEditWindow? _itemEditWindow;
     private AboutWindow? _aboutWindow;
+    private ImportWindow? _importWindow;
 
     public MainWindow()
     {
@@ -93,6 +96,7 @@ public partial class MainWindow : Window
     {
         _itemEditWindow?.Close();
         _aboutWindow?.Close();
+        _importWindow?.Close();
         SaveSettings();
     }
 
@@ -207,6 +211,57 @@ public partial class MainWindow : Window
     private void OnContextTagClicked(object? sender, RoutedEventArgs e)
     {
         // TODO: タグ編集機能を実装
+    }
+
+    private async void OnImportFromFilesClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var storageProvider = StorageProvider;
+        var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "インポートするファイルを選択",
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("TSVファイル") { Patterns = ["*.tsv"] },
+                new FilePickerFileType("すべてのファイル") { Patterns = ["*"] },
+            ],
+        });
+
+        if (files == null || files.Count == 0)
+        {
+            return;
+        }
+
+        var filePath = files[0].Path.LocalPath;
+
+        var items = FLaunch1Reader.ReadItems(filePath).ToArray();
+
+        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        _importWindow?.Close();
+        _importWindow = new ImportWindow
+        {
+            DataContext = importVm,
+        };
+        _importWindow.ImportClicked += ImportWindow_ImportClicked;
+        _importWindow.Closed += (_, _) => _importWindow = null;
+
+        _importWindow.Show();
+    }
+
+    private void ImportWindow_ImportClicked(object? sender, EventArgs e)
+    {
+        if (sender is ImportWindow importWindow && importWindow.DataContext is ImportViewModel importVm && DataContext is MainViewModel mainVm)
+        {
+            foreach (var item in importVm.SelectedItems)
+            {
+                mainVm.AddItem(item);
+            }
+        }
     }
 
     private void OnAboutClicked(object? sender, RoutedEventArgs e)

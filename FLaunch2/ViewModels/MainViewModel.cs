@@ -18,6 +18,7 @@ public class MainViewModel : ViewModelBase
     private readonly IIconExtractor _iconExtractor = new AssociatedIconExtractor();
 
     public AppSettings Settings { get; private set; } = new();
+    public IIconExtractor IconExtractor => _iconExtractor;
 
     public ObservableCollection<Item> Items
     {

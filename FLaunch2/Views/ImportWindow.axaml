@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:FLaunch2.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:FLaunch2.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
+        x:Class="FLaunch2.Views.ImportWindow"
+        x:DataType="vm:ImportViewModel"
+        Icon="/Assets/FLaunch.ico"
+        Width="500"
+        Height="400"
+        WindowStartupLocation="CenterScreen"
+        Title="インポート">
+  <DockPanel Margin="12">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+      <Button Content="すべて選択" Command="{Binding SelectAllCommand}" />
+      <Button Content="すべて解除" Command="{Binding DeselectAllCommand}" />
+      <Button Content="インポート" Click="OnImportClicked" IsDefault="True" />
+      <Button Content="キャンセル" Click="OnCancelClicked" IsCancel="True" />
+    </StackPanel>
+    <ListBox ItemsSource="{Binding Items}" SelectionMode="Toggle">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="vm:ImportItemViewModel">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <CheckBox IsChecked="{Binding IsSelected}" />
+            <local:ItemView DataContext="{Binding ItemViewModel}" />
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </DockPanel>
+</Window>
