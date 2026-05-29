@@ -99,6 +99,7 @@ public partial class MainWindow : Window
         _itemEditWindow?.Close();
         _aboutWindow?.Close();
         _importWindow?.Close();
+        _confirmWindow?.Close();
         if (!_skipSaveOnClose)
         {
             SaveSettings();
