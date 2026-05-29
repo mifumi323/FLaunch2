@@ -49,7 +49,7 @@
           <MenuItem Header="ファイルからインポート(_F)" Click="OnImportFromFilesClicked"/>
           <MenuItem Header="スタートメニューからインポート(_S)"/>
           <Separator/>
-          <MenuItem Header="データを消して終了"/>
+          <MenuItem Header="データを消して終了" Click="OnClearDataAndExitClicked"/>
         </MenuItem>
         <Separator/>
         <MenuItem Header="バージョン情報(_A)" Click="OnAboutClicked"/>

@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     private ItemEditWindow? _itemEditWindow;
     private AboutWindow? _aboutWindow;
     private ImportWindow? _importWindow;
+    private bool _skipSaveOnClose;
 
     public MainWindow()
     {
@@ -97,7 +98,10 @@ public partial class MainWindow : Window
         _itemEditWindow?.Close();
         _aboutWindow?.Close();
         _importWindow?.Close();
-        SaveSettings();
+        if (!_skipSaveOnClose)
+        {
+            SaveSettings();
+        }
     }
 
     internal void Display()
@@ -262,6 +266,26 @@ public partial class MainWindow : Window
                 mainVm.AddItem(item);
             }
         }
+    }
+
+    private async void OnClearDataAndExitClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var confirm = new ConfirmWindow("すべてのデータを消して終了しますか？\nこの操作は元に戻せません。");
+        await confirm.ShowDialog(this);
+
+        if (!confirm.Confirmed)
+        {
+            return;
+        }
+
+        _skipSaveOnClose = true;
+        mainVm.DeleteAllData();
+        Close();
     }
 
     private void OnAboutClicked(object? sender, RoutedEventArgs e)

@@ -193,4 +193,36 @@ public class MainViewModel : ViewModelBase
             });
         }
     }
+
+    internal void DeleteAllData()
+    {
+        _repository.Dispose();
+
+        var dbPath = DataPathProvider.DatabasePath;
+        var settingsPath = DataPathProvider.SettingsPath;
+        var folder = DataPathProvider.AppDataFolderRaw;
+
+        DeleteFileIfExists(dbPath);
+        // LiteDB が -journal ファイルを作成することがある
+        DeleteFileIfExists(dbPath + "-journal");
+        DeleteFileIfExists(settingsPath);
+
+        DeleteFolderIfEmpty(folder);
+    }
+
+    private static void DeleteFileIfExists(string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
+    private static void DeleteFolderIfEmpty(string folder)
+    {
+        if (Directory.Exists(folder) && Directory.GetFileSystemEntries(folder).Length == 0)
+        {
+            Directory.Delete(folder);
+        }
+    }
 }

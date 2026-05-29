@@ -23,6 +23,18 @@ public class DataPathProvider
     public static string SettingsPath => Path.Combine(AppDataFolder, SettingsFileName);
 
     /// <summary>
+    /// アプリケーションデータフォルダのパスを取得します（フォルダが存在しない場合は作成しません）
+    /// </summary>
+    public static string AppDataFolderRaw
+    {
+        get
+        {
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            return Path.Combine(appDataPath, AppFolderName);
+        }
+    }
+
+    /// <summary>
     /// アプリケーションデータフォルダのパスを取得します
     /// </summary>
     public static string AppDataFolder
