@@ -14,10 +14,10 @@
         Title="インポート">
   <DockPanel Margin="12">
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
-      <Button Content="すべて選択" Command="{Binding SelectAllCommand}" />
-      <Button Content="すべて解除" Command="{Binding DeselectAllCommand}" />
-      <Button Content="インポート" Click="OnImportClicked" IsDefault="True" />
-      <Button Content="キャンセル" Click="OnCancelClicked" IsCancel="True" />
+      <Button Content="すべて選択" Command="{Binding SelectAllCommand}" HorizontalContentAlignment="Center" />
+      <Button Content="すべて解除" Command="{Binding DeselectAllCommand}" HorizontalContentAlignment="Center" />
+      <Button Content="インポート" Click="OnImportClicked" IsDefault="True" HorizontalContentAlignment="Center" />
+      <Button Content="キャンセル" Click="OnCancelClicked" IsCancel="True" HorizontalContentAlignment="Center" />
     </StackPanel>
     <ListBox ItemsSource="{Binding Items}" SelectionMode="Toggle">
       <ListBox.ItemTemplate>

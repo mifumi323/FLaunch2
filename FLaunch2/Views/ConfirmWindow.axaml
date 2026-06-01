@@ -11,8 +11,8 @@
   <Grid Margin="16" RowDefinitions="*,Auto">
 	<TextBlock Grid.Row="0" x:Name="MessageText" TextWrapping="Wrap" VerticalAlignment="Center"/>
 	<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-	  <Button x:Name="OkButton" Content="OK" Width="80" Click="OnOkClicked"/>
-	  <Button x:Name="CancelButton" Content="キャンセル" Width="80" Click="OnCancelClicked"/>
+	  <Button x:Name="OkButton" Content="OK" Width="80" Click="OnOkClicked" HorizontalContentAlignment="Center"/>
+	  <Button x:Name="CancelButton" Content="キャンセル" Width="80" Click="OnCancelClicked" HorizontalContentAlignment="Center"/>
 	</StackPanel>
   </Grid>
 </Window>
