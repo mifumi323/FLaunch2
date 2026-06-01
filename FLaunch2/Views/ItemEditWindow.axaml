@@ -19,12 +19,12 @@
     <!-- 下部ボタン -->
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
                 HorizontalAlignment="Right" Margin="0,8,0,0" Spacing="8">
-      <Button Content="リンク解析" Command="{Binding ResolveLinkCommand}" />
+      <Button Content="リンク解析" Command="{Binding ResolveLinkCommand}" HorizontalContentAlignment="Center" />
       <Panel Width="80" /> <!-- スペーサー -->
       <Button Content="OK" Width="75" Command="{Binding OkCommand}"
-              CommandParameter="{Binding $parent[Window]}" />
+              CommandParameter="{Binding $parent[Window]}" HorizontalContentAlignment="Center" />
       <Button Content="キャンセル" Width="75" Command="{Binding CancelCommand}"
-              CommandParameter="{Binding $parent[Window]}" />
+              CommandParameter="{Binding $parent[Window]}" HorizontalContentAlignment="Center" />
     </StackPanel>
 
     <!-- フォーム本体 -->
