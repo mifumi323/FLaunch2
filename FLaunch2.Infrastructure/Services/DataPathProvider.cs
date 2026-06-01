@@ -1,13 +1,11 @@
-﻿using System;
-using System.IO;
-
-namespace FLaunch2.Services;
+﻿namespace FLaunch2.Services;
 
 /// <summary>
 /// アプリケーションのデータファイルパスを提供するサービス
 /// </summary>
 public class DataPathProvider
 {
+    private const string VendorName = "MifuminSoft";
     private const string AppFolderName = "FLaunch2";
     private const string DatabaseFileName = "items.db";
     private const string SettingsFileName = "settings.json";
@@ -30,7 +28,7 @@ public class DataPathProvider
         get
         {
             var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            return Path.Combine(appDataPath, AppFolderName);
+            return Path.Combine(appDataPath, VendorName, AppFolderName);
         }
     }
 
@@ -41,8 +39,7 @@ public class DataPathProvider
     {
         get
         {
-            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var appFolder = Path.Combine(appDataPath, AppFolderName);
+            var appFolder = AppDataFolderRaw;
 
             if (!Directory.Exists(appFolder))
             {
