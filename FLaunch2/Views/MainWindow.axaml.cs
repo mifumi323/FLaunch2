@@ -219,6 +219,29 @@ public partial class MainWindow : Window
         // TODO: タグ編集機能を実装
     }
 
+    private void OnImportFromStartMenuClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var items = StartMenuReader.ReadItems()
+            .OrderBy(i => i.DisplayName)
+            .ToArray();
+
+        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        _importWindow?.Close();
+        _importWindow = new ImportWindow
+        {
+            DataContext = importVm,
+        };
+        _importWindow.ImportClicked += ImportWindow_ImportClicked;
+        _importWindow.Closed += (_, _) => _importWindow = null;
+
+        _importWindow.Show();
+    }
+
     private async void OnImportFromFilesClicked(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel mainVm)

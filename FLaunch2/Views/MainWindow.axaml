@@ -47,7 +47,7 @@
           <MenuItem Header="リストをエクスポート(_E)"/>
           <Separator/>
           <MenuItem Header="ファイルからインポート(_F)" Click="OnImportFromFilesClicked"/>
-          <MenuItem Header="スタートメニューからインポート(_S)"/>
+          <MenuItem Header="スタートメニューからインポート(_S)" Click="OnImportFromStartMenuClicked"/>
           <Separator/>
           <MenuItem Header="データを消して終了" Click="OnClearDataAndExitClicked"/>
         </MenuItem>
