@@ -38,9 +38,7 @@
         <MenuItem Header="名前で並べ替え" Click="OnSortByDisplayNameClicked"/>
         <MenuItem Header="ファイル名で並べ替え" Click="OnSortByFilePathClicked"/>
         <Separator/>
-        <MenuItem Header="オプション(_O)">
-          <MenuItem Header="環境変数の展開(_E)"/>
-        </MenuItem>
+        <MenuItem Header="オプション(_O)" Click="OnOptionClicked"/>
         <MenuItem Header="データ管理(_D)">
           <MenuItem Header="追加(_A)" Click="OnAddClicked"/>
           <Separator/>
