@@ -366,13 +366,14 @@ public partial class MainWindow : Window
         {
             return;
         }
-        var vm = new OptionViewModel(mainVm);
+        var vm = new OptionViewModel(mainVm.Settings);
         _optionWindow?.Close();
         _optionWindow = new OptionWindow
         {
             DataContext = vm,
         };
         _optionWindow.Closed += (_, _) => _optionWindow = null;
+        _optionWindow.OkClicked += (_, _) => SaveSettings();
         _optionWindow.Show();
     }
 }

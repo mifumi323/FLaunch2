@@ -2,8 +2,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="FLaunch2.OptionWindow"
+        xmlns:vm="using:FLaunch2.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="180"
+        x:Class="FLaunch2.Views.OptionWindow"
+        x:DataType="vm:OptionViewModel"
+        Icon="/Assets/FLaunch.ico"
+        Width="420"
+        Height="180"
+        CanResize="False"
+        CanMaximize="False"
+        WindowStartupLocation="CenterScreen"
         Title="オプション">
-  Welcome to Avalonia!
+  <DockPanel Margin="12">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+      <Button Content="OK" Width="75" IsDefault="True" HorizontalContentAlignment="Center" Click="OnOkClicked" />
+      <Button Content="キャンセル" Width="75" IsCancel="True" HorizontalContentAlignment="Center" Click="OnCancelClicked" />
+    </StackPanel>
+
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="8" ColumnSpacing="8">
+      <Label Grid.Row="0" Grid.Column="0" Content="初期スコア係数" VerticalAlignment="Center" />
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding InitialScoreRate}" />
+
+      <Label Grid.Row="1" Grid.Column="0" Content="スコア増加係数" VerticalAlignment="Center" />
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScoreIncreaseRate}" />
+    </Grid>
+  </DockPanel>
 </Window>
