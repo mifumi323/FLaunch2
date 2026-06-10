@@ -10,10 +10,15 @@ namespace FLaunch2.ViewModels;
 
 public class ImportViewModel : ViewModelBase
 {
-    public ImportViewModel(IEnumerable<Item> items, IIconExtractor iconExtractor)
+    public ImportViewModel(IEnumerable<Item> items, IEnumerable<Item> existingItems, ItemEquivalenceCondition condition, IIconExtractor iconExtractor)
     {
+        var existing = existingItems.ToArray();
+
         Items = new ObservableCollection<ImportItemViewModel>(
-            items.Select(i => new ImportItemViewModel(i, iconExtractor)));
+            items.Select(i => new ImportItemViewModel(i, iconExtractor)
+            {
+                IsSelected = !existing.Any(e => i.Equals(e, condition))
+            }));
         SelectAllCommand = ReactiveCommand.Create(SelectAll);
         DeselectAllCommand = ReactiveCommand.Create(DeselectAll);
     }

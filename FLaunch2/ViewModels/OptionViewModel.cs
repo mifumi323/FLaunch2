@@ -17,6 +17,26 @@ public class OptionViewModel : ViewModelBase
         get; set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public bool ItemEquivalenceDisplayName
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public bool ItemEquivalenceFilePath
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public bool ItemEquivalenceWorkingDirectory
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public bool ItemEquivalenceArguments
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public OptionViewModel(AppSettings settings)
     {
         _settings = settings;
@@ -27,11 +47,22 @@ public class OptionViewModel : ViewModelBase
     {
         _settings.InitialScoreRate = InitialScoreRate;
         _settings.ScoreIncreaseRate = ScoreIncreaseRate;
+        _settings.ItemEquivalence ??= new ItemEquivalenceCondition();
+        _settings.ItemEquivalence.DisplayName = ItemEquivalenceDisplayName;
+        _settings.ItemEquivalence.FilePath = ItemEquivalenceFilePath;
+        _settings.ItemEquivalence.WorkingDirectory = ItemEquivalenceWorkingDirectory;
+        _settings.ItemEquivalence.Arguments = ItemEquivalenceArguments;
     }
 
     private void RestoreSettings()
     {
         InitialScoreRate = _settings.InitialScoreRate;
         ScoreIncreaseRate = _settings.ScoreIncreaseRate;
+
+        var itemEquivalence = _settings.ItemEquivalence ?? new ItemEquivalenceCondition();
+        ItemEquivalenceDisplayName = itemEquivalence.DisplayName;
+        ItemEquivalenceFilePath = itemEquivalence.FilePath;
+        ItemEquivalenceWorkingDirectory = itemEquivalence.WorkingDirectory;
+        ItemEquivalenceArguments = itemEquivalence.Arguments;
     }
 }

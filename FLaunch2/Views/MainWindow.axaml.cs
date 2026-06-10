@@ -232,7 +232,7 @@ public partial class MainWindow : Window
             .OrderBy(i => i.DisplayName)
             .ToArray();
 
-        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
         _importWindow?.Close();
         _importWindow = new ImportWindow
         {
@@ -272,7 +272,7 @@ public partial class MainWindow : Window
 
         var items = FLaunch1Reader.ReadItems(filePath).ToArray();
 
-        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
         _importWindow?.Close();
         _importWindow = new ImportWindow
         {

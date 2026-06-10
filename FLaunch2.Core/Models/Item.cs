@@ -41,6 +41,31 @@ namespace FLaunch2.Models
             }
         }
 
+        public bool Equals(Item other, ItemEquivalenceCondition condition)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (condition.DisplayName && !string.Equals(DisplayName, other.DisplayName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.FilePath && !string.Equals(FilePath, other.FilePath, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.WorkingDirectory && !string.Equals(WorkingDirectory, other.WorkingDirectory, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.Arguments && !string.Equals(Arguments, other.Arguments, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public static double CalculateInitialScore(ICollection<Item> items, double initialScoreRate)
         {
             if (items.Count == 0)
