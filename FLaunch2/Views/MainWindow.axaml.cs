@@ -16,6 +16,7 @@ public partial class MainWindow : Window
     private AboutWindow? _aboutWindow;
     private ImportWindow? _importWindow;
     private ConfirmWindow? _confirmWindow;
+    private OptionWindow? _optionWindow;
     private bool _skipSaveOnClose;
 
     public MainWindow()
@@ -100,6 +101,7 @@ public partial class MainWindow : Window
         _aboutWindow?.Close();
         _importWindow?.Close();
         _confirmWindow?.Close();
+        _optionWindow?.Close();
         if (!_skipSaveOnClose)
         {
             SaveSettings();
@@ -230,7 +232,7 @@ public partial class MainWindow : Window
             .OrderBy(i => i.DisplayName)
             .ToArray();
 
-        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
         _importWindow?.Close();
         _importWindow = new ImportWindow
         {
@@ -270,7 +272,7 @@ public partial class MainWindow : Window
 
         var items = FLaunch1Reader.ReadItems(filePath).ToArray();
 
-        var importVm = new ImportViewModel(items, mainVm.IconExtractor);
+        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
         _importWindow?.Close();
         _importWindow = new ImportWindow
         {
@@ -356,5 +358,22 @@ public partial class MainWindow : Window
         {
             mainVm.SetSortOrder(sortOrder);
         }
+    }
+
+    private void OnOptionClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+        var vm = new OptionViewModel(mainVm.Settings);
+        _optionWindow?.Close();
+        _optionWindow = new OptionWindow
+        {
+            DataContext = vm,
+        };
+        _optionWindow.Closed += (_, _) => _optionWindow = null;
+        _optionWindow.OkClicked += (_, _) => SaveSettings();
+        _optionWindow.Show();
     }
 }

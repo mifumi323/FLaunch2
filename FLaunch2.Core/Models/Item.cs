@@ -6,13 +6,13 @@ namespace FLaunch2.Models
     {
         [BsonId]
         public Guid Id { get; set; } = Guid.NewGuid();
-        public string DisplayName { get; set; } = string.Empty;
-        public string FilePath { get; set; } = string.Empty;
-        public string WorkingDirectory { get; set; } = string.Empty;
+        public string DisplayName { get => field; set => field = value ?? string.Empty; } = string.Empty;
+        public string FilePath { get => field; set => field = value ?? string.Empty; } = string.Empty;
+        public string WorkingDirectory { get => field; set => field = value ?? string.Empty; } = string.Empty;
         public double Score { get; set; } = 0.0;
         public DateTimeOffset LastExecuted { get; set; }
-        public string Arguments { get; set; } = string.Empty;
-        public string Comment { get; set; } = string.Empty;
+        public string Arguments { get => field; set => field = value ?? string.Empty; } = string.Empty;
+        public string Comment { get => field; set => field = value ?? string.Empty; } = string.Empty;
         public string[] Tags { get; set; } = [];
 
         public bool IncreaseScore(ICollection<Item> items, double scoreIncreaseRate)
@@ -39,6 +39,31 @@ namespace FLaunch2.Models
                 Score += delta;
                 return false;
             }
+        }
+
+        public bool Equals(Item other, ItemEquivalenceCondition condition)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (condition.DisplayName && !string.Equals(DisplayName, other.DisplayName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.FilePath && !string.Equals(FilePath, other.FilePath, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.WorkingDirectory && !string.Equals(WorkingDirectory, other.WorkingDirectory, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.Arguments && !string.Equals(Arguments, other.Arguments, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            return true;
         }
 
         public static double CalculateInitialScore(ICollection<Item> items, double initialScoreRate)

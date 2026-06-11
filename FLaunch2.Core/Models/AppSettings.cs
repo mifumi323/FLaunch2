@@ -29,4 +29,9 @@ public class AppSettings
     /// 並べ替え順序
     /// </summary>
     public SortOrder SortOrder { get; set; } = SortOrder.Score;
+
+    /// <summary>
+    /// 同値判定基準
+    /// </summary>
+    public ItemEquivalenceCondition ItemEquivalence { get; set; } = new();
 }
