@@ -6,19 +6,12 @@ using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 
 namespace FLaunch2.ViewModels;
 
-public class ItemViewModel : ViewModelBase
+public class ItemViewModel(Item item, IIconExtractor iconExtractor) : ViewModelBase
 {
-    private readonly IIconExtractor _iconExtractor;
     private AvaloniaBitmap? _icon;
     private bool _iconLoading;
 
-    public ItemViewModel(Item item, IIconExtractor iconExtractor)
-    {
-        Item = item;
-        _iconExtractor = iconExtractor;
-    }
-
-    public Item Item { get; }
+    public Item Item { get; } = item;
 
     public string DisplayName => Item.DisplayName;
 
@@ -38,6 +31,6 @@ public class ItemViewModel : ViewModelBase
 
     private async Task LoadIconAsync()
     {
-        Icon = await _iconExtractor.ExtractIconAsync(Item.FilePath);
+        Icon = await iconExtractor.ExtractIconAsync(Item.FilePath);
     }
 }
