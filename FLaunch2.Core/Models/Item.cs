@@ -6,13 +6,13 @@ namespace FLaunch2.Models
     {
         [BsonId]
         public Guid Id { get; set; } = Guid.NewGuid();
-        public string DisplayName { get => field; set => field = value ?? string.Empty; } = string.Empty;
-        public string FilePath { get => field; set => field = value ?? string.Empty; } = string.Empty;
-        public string WorkingDirectory { get => field; set => field = value ?? string.Empty; } = string.Empty;
+        public string DisplayName { get; set => field = value ?? string.Empty; } = string.Empty;
+        public string FilePath { get; set => field = value ?? string.Empty; } = string.Empty;
+        public string WorkingDirectory { get; set => field = value ?? string.Empty; } = string.Empty;
         public double Score { get; set; } = 0.0;
         public DateTimeOffset LastExecuted { get; set; }
-        public string Arguments { get => field; set => field = value ?? string.Empty; } = string.Empty;
-        public string Comment { get => field; set => field = value ?? string.Empty; } = string.Empty;
+        public string Arguments { get; set => field = value ?? string.Empty; } = string.Empty;
+        public string Comment { get; set => field = value ?? string.Empty; } = string.Empty;
         public string[] Tags { get; set; } = [];
 
         public bool IncreaseScore(ICollection<Item> items, double scoreIncreaseRate)

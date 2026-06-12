@@ -1,9 +1,6 @@
 ﻿using FLaunch2.Models;
 using FLaunch2.Services;
 using LiteDB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FLaunch2.Repositories;
 
@@ -112,9 +109,9 @@ public class ItemRepository : IDisposable
                 // マネージドリソースの解放
                 _database?.Dispose();
             }
-            
+
             // アンマネージドリソースの解放（この場合は不要）
-            
+
             _disposed = true;
         }
     }

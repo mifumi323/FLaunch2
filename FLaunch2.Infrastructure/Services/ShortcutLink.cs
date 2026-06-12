@@ -1,4 +1,3 @@
-#nullable enable
 using IWshRuntimeLibrary;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
