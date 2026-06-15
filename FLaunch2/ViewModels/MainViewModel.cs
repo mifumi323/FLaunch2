@@ -103,14 +103,24 @@ public class MainViewModel : ViewModelBase
 
         try
         {
-            var psi = new ProcessStartInfo
+            var psi = item.ItemType switch
             {
-                FileName = item.FilePath,
-                Arguments = item.Arguments,
-                WorkingDirectory = string.IsNullOrWhiteSpace(item.WorkingDirectory)
-                    ? null
-                    : item.WorkingDirectory,
-                UseShellExecute = true,
+                ItemType.NativeApp => new ProcessStartInfo
+                {
+                    FileName = item.FilePath,
+                    Arguments = item.Arguments,
+                    WorkingDirectory = string.IsNullOrWhiteSpace(item.WorkingDirectory)
+                        ? null
+                        : item.WorkingDirectory,
+                    UseShellExecute = true,
+                },
+                ItemType.StoreApp => new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = $"shell:AppsFolder\\{item.FilePath}",
+                    UseShellExecute = false,
+                },
+                _ => throw new NotImplementedException(),
             };
             if (runas)
             {
