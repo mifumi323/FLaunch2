@@ -10,7 +10,7 @@
         Icon="/Assets/FLaunch.ico"
         ShowInTaskbar="False"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        WindowDecorations="BorderOnly"
         Padding="1"
         Topmost="True"
         CanMaximize="False"
