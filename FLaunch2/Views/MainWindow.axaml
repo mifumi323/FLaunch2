@@ -10,7 +10,7 @@
         Icon="/Assets/FLaunch.ico"
         ShowInTaskbar="False"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        WindowDecorations="BorderOnly"
         Padding="1"
         Topmost="True"
         CanMaximize="False"
@@ -33,10 +33,10 @@
     </Grid.RowDefinitions>
     <Menu>
       <MenuItem Header="浮き沈みランチャー">
-        <MenuItem Header="スコアで並べ替え" Click="OnSortByScoreClicked"/>
-        <MenuItem Header="利用日時で並べ替え" Click="OnSortByLastExecutedClicked"/>
-        <MenuItem Header="名前で並べ替え" Click="OnSortByDisplayNameClicked"/>
-        <MenuItem Header="ファイル名で並べ替え" Click="OnSortByFilePathClicked"/>
+        <MenuItem x:Name="SortByScoreMenuItem" Header="スコアで並べ替え" ToggleType="Radio" GroupName=" Sort" Click="OnSortByScoreClicked"/>
+        <MenuItem x:Name="SortByLastExecutedMenuItem" Header="利用日時で並べ替え" ToggleType="Radio" GroupName=" Sort" Click="OnSortByLastExecutedClicked"/>
+        <MenuItem x:Name="SortByDisplayNameMenuItem" Header="名前で並べ替え" ToggleType="Radio" GroupName=" Sort" Click="OnSortByDisplayNameClicked"/>
+        <MenuItem x:Name="SortByFilePathMenuItem" Header="ファイル名で並べ替え" ToggleType="Radio" GroupName=" Sort" Click="OnSortByFilePathClicked"/>
         <Separator/>
         <MenuItem Header="オプション(_O)" Click="OnOptionClicked"/>
         <MenuItem Header="データ管理(_D)">
