@@ -74,7 +74,13 @@ public static class StartMenuReader
         var filePath = ResolveFilePath(entry.AppID);
         if (filePath == null)
         {
-            return null;
+            // まあストアアプリじゃねえかな
+            return new Item
+            {
+                DisplayName = entry.Name,
+                FilePath = entry.AppID,
+                ItemType = ItemType.StoreApp,
+            };
         }
 
         return new Item
