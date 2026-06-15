@@ -32,6 +32,10 @@ public partial class MainWindow : Window
             mainVm.LoadSettings();
             Width = mainVm.Settings.WindowWidth;
             Height = mainVm.Settings.WindowHeight;
+            SortByScoreMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.Score;
+            SortByLastExecutedMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.LastExecuted;
+            SortByDisplayNameMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.DisplayName;
+            SortByFilePathMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.FilePath;
         }
     }
 
