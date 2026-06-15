@@ -9,6 +9,11 @@ using System.Reactive;
 
 namespace FLaunch2.ViewModels;
 
+internal static class ItemTypeExtensions
+{
+    public static readonly ItemType[] AllItemTypes = Enum.GetValues<ItemType>();
+}
+
 public class ItemEditViewModel : ViewModelBase
 {
     private string _displayName = string.Empty;
@@ -17,6 +22,7 @@ public class ItemEditViewModel : ViewModelBase
     private string _workingDirectory = string.Empty;
     private string _comment = string.Empty;
     private string _newTag = string.Empty;
+    private ItemType _itemType = ItemType.NativeApp;
 
     public ItemEditViewModel()
     {
@@ -34,6 +40,7 @@ public class ItemEditViewModel : ViewModelBase
         Arguments = item.Arguments;
         WorkingDirectory = item.WorkingDirectory;
         Comment = item.Comment;
+        ItemType = item.ItemType;
 
         foreach (var tag in allTags)
         {
@@ -88,7 +95,15 @@ public class ItemEditViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _newTag, value);
     }
 
+    public ItemType ItemType
+    {
+        get => _itemType;
+        set => this.RaiseAndSetIfChanged(ref _itemType, value);
+    }
+
     public ObservableCollection<TagItemViewModel> TagItems { get; } = [];
+
+    public ItemType[] ItemTypes => ItemTypeExtensions.AllItemTypes;
 
     public ReactiveCommand<Window, Unit> OkCommand { get; }
     public ReactiveCommand<Window, Unit> CancelCommand { get; }
@@ -102,6 +117,7 @@ public class ItemEditViewModel : ViewModelBase
         item.Arguments = Arguments;
         item.WorkingDirectory = WorkingDirectory;
         item.Comment = Comment;
+        item.ItemType = ItemType;
 
         var tags = TagItems
             .Where(t => t.IsChecked)
