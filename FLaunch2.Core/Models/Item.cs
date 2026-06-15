@@ -14,6 +14,7 @@ namespace FLaunch2.Models
         public string Arguments { get; set => field = value ?? string.Empty; } = string.Empty;
         public string Comment { get; set => field = value ?? string.Empty; } = string.Empty;
         public string[] Tags { get; set; } = [];
+        public ItemType ItemType { get; set; } = ItemType.NativeApp;
 
         public bool IncreaseScore(ICollection<Item> items, double scoreIncreaseRate)
         {
@@ -60,6 +61,10 @@ namespace FLaunch2.Models
                 return false;
             }
             if (condition.Arguments && !string.Equals(Arguments, other.Arguments, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            if (condition.ItemType && ItemType != other.ItemType)
             {
                 return false;
             }
