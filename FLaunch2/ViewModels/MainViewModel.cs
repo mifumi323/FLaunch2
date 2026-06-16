@@ -15,7 +15,7 @@ public class MainViewModel : ViewModelBase
 {
     private readonly ItemRepository _repository = new();
     private readonly SettingsRepository _settingsRepository = new();
-    private readonly IIconExtractor _iconExtractor = new AssociatedIconExtractor();
+    private readonly IIconExtractor _iconExtractor;
 
     public AppSettings Settings { get; private set; } = new();
     public IIconExtractor IconExtractor => _iconExtractor;
@@ -37,6 +37,7 @@ public class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
+        _iconExtractor = new AssociatedIconExtractor(Settings);
         PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(Items) || e.PropertyName == nameof(Settings) || e.PropertyName == nameof(SearchText))
@@ -107,11 +108,11 @@ public class MainViewModel : ViewModelBase
             {
                 ItemType.NativeApp => new ProcessStartInfo
                 {
-                    FileName = item.FilePath,
-                    Arguments = item.Arguments,
+                    FileName = AutoExpandEnvironmentVariables(item.FilePath),
+                    Arguments = AutoExpandEnvironmentVariables(item.Arguments),
                     WorkingDirectory = string.IsNullOrWhiteSpace(item.WorkingDirectory)
                         ? null
-                        : item.WorkingDirectory,
+                        : AutoExpandEnvironmentVariables(item.WorkingDirectory),
                     UseShellExecute = true,
                 },
                 ItemType.StoreApp => new ProcessStartInfo
@@ -142,6 +143,13 @@ public class MainViewModel : ViewModelBase
         {
             Console.Error.WriteLine(ex.Message);
         }
+    }
+
+    private string AutoExpandEnvironmentVariables(string path)
+    {
+        return Settings.ExpandEnvironmentVariables ?
+            Environment.ExpandEnvironmentVariables(path)
+            : path;
     }
 
     internal void DuplicateItem(Item item)
@@ -183,7 +191,7 @@ public class MainViewModel : ViewModelBase
 
         Process.Start(new ProcessStartInfo
         {
-            FileName = item.WorkingDirectory,
+            FileName = AutoExpandEnvironmentVariables(item.WorkingDirectory),
             UseShellExecute = true,
         });
     }
@@ -193,7 +201,7 @@ public class MainViewModel : ViewModelBase
         if (string.IsNullOrWhiteSpace(item.FilePath))
             return;
 
-        var dir = Path.GetDirectoryName(item.FilePath);
+        var dir = Path.GetDirectoryName(AutoExpandEnvironmentVariables(item.FilePath));
         if (!string.IsNullOrWhiteSpace(dir))
         {
             Process.Start(new ProcessStartInfo

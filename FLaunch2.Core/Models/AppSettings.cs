@@ -34,4 +34,9 @@ public class AppSettings
     /// 同値判定基準
     /// </summary>
     public ItemEquivalenceCondition ItemEquivalence { get; set; } = new();
+
+    /// <summary>
+    /// 環境変数を展開するかどうか
+    /// </summary>
+    public bool ExpandEnvironmentVariables { get; set; } = true;
 }
