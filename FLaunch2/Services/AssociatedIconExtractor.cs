@@ -1,3 +1,5 @@
+using FLaunch2.Models;
+using System;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,21 +10,21 @@ namespace FLaunch2.Services;
 /// <summary>
 /// 関連付けられたアイコンを使用してファイルからアイコンを取得する実装
 /// </summary>
-public class AssociatedIconExtractor : IIconExtractor
+public class AssociatedIconExtractor(AppSettings appSettings) : IIconExtractor
 {
     public async Task<AvaloniaBitmap?> ExtractIconAsync(string filePath)
     {
         return await Task.Run(() => ExtractIcon(filePath));
     }
 
-    private static AvaloniaBitmap? ExtractIcon(string filePath)
+    private AvaloniaBitmap? ExtractIcon(string filePath)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 return null;
 
-            using var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
+            using var icon = System.Drawing.Icon.ExtractAssociatedIcon(appSettings.ExpandEnvironmentVariables ? Environment.ExpandEnvironmentVariables(filePath) : filePath);
             if (icon is null)
                 return null;
 

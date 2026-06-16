@@ -37,6 +37,8 @@
           <CheckBox Content="パラメータ引数" IsChecked="{Binding ItemEquivalenceArguments}" />
         </StackPanel>
       </Border>
+
+      <CheckBox Content="環境変数の展開" IsChecked="{Binding ExpandEnvironmentVariables}" />
     </StackPanel>
   </DockPanel>
 </Window>

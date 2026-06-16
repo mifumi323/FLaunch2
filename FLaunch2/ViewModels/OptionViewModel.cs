@@ -37,6 +37,11 @@ public class OptionViewModel : ViewModelBase
         get; set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public bool ExpandEnvironmentVariables
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public OptionViewModel(AppSettings settings)
     {
         _settings = settings;
@@ -52,6 +57,7 @@ public class OptionViewModel : ViewModelBase
         _settings.ItemEquivalence.FilePath = ItemEquivalenceFilePath;
         _settings.ItemEquivalence.WorkingDirectory = ItemEquivalenceWorkingDirectory;
         _settings.ItemEquivalence.Arguments = ItemEquivalenceArguments;
+        _settings.ExpandEnvironmentVariables = ExpandEnvironmentVariables;
     }
 
     private void RestoreSettings()
@@ -64,5 +70,7 @@ public class OptionViewModel : ViewModelBase
         ItemEquivalenceFilePath = itemEquivalence.FilePath;
         ItemEquivalenceWorkingDirectory = itemEquivalence.WorkingDirectory;
         ItemEquivalenceArguments = itemEquivalence.Arguments;
+
+        ExpandEnvironmentVariables = _settings.ExpandEnvironmentVariables;
     }
 }
