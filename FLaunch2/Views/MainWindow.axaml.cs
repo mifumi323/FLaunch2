@@ -5,7 +5,9 @@ using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace FLaunch2.Views;
 
@@ -223,6 +225,61 @@ public partial class MainWindow : Window
     private void OnContextTagClicked(object? sender, RoutedEventArgs e)
     {
         // TODO: タグ編集機能を実装
+    }
+
+    private async void OnExportAsJsonClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "JSONエクスポート先を選択",
+            SuggestedFileName = "flaunch2-items.json",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("JSONファイル") { Patterns = ["*.json"] },
+                new FilePickerFileType("すべてのファイル") { Patterns = ["*"] },
+            ],
+        });
+
+        if (file is null)
+        {
+            return;
+        }
+
+        await using var stream = await file.OpenWriteAsync();
+        await JsonSerializer.SerializeAsync(stream, mainVm.Items.ToArray());
+    }
+
+    private async void OnExportAsTsvClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel mainVm)
+        {
+            return;
+        }
+
+        var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "TSVエクスポート先を選択",
+            SuggestedFileName = "flaunch2-items.tsv",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("TSVファイル") { Patterns = ["*.tsv"] },
+                new FilePickerFileType("すべてのファイル") { Patterns = ["*"] },
+            ],
+        });
+
+        if (file is null)
+        {
+            return;
+        }
+
+        await using var stream = await file.OpenWriteAsync();
+        using var writer = new StreamWriter(stream);
+        FLaunch1Writer.WriteItems(writer, mainVm.Items);
     }
 
     private void OnImportFromStartMenuClicked(object? sender, RoutedEventArgs e)
