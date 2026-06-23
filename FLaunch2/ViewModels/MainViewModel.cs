@@ -16,9 +16,11 @@ public class MainViewModel : ViewModelBase
     private readonly ItemRepository _repository = new();
     private readonly SettingsRepository _settingsRepository = new();
     private readonly IIconExtractor _iconExtractor;
+    private readonly ErrorNotificationService _errorService = new();
 
     public AppSettings Settings { get; private set; } = new();
     public IIconExtractor IconExtractor => _iconExtractor;
+    public ErrorNotificationService ErrorService => _errorService;
 
     public ObservableCollection<Item> Items
     {
@@ -141,7 +143,11 @@ public class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine(ex.Message);
+            _errorService.NotifyError(
+                $"'{item.DisplayName}' を実行できませんでした。",
+                ex.Message,
+                ErrorSeverity.Warning
+            );
         }
     }
 

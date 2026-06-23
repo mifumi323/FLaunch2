@@ -30,6 +30,7 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Menu>
       <MenuItem Header="浮き沈みランチャー">
@@ -89,5 +90,9 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
+    <!-- トースト通知パネル -->
+    <Border x:Name="ToastPanel" Grid.Row="2" Grid.ColumnSpan="2" Background="#FFF3CD" BorderBrush="#FFC107" BorderThickness="0,1,0,0" Padding="12,8" IsVisible="False">
+      <TextBlock x:Name="ToastMessage" VerticalAlignment="Center" Foreground="#333333" />
+    </Border>
   </Grid>
 </Window>
