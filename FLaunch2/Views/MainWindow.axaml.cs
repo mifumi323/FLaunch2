@@ -1,6 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using FLaunch2.ViewModels;
@@ -8,6 +10,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FLaunch2.Views;
 
@@ -20,6 +24,7 @@ public partial class MainWindow : Window
     private ConfirmWindow? _confirmWindow;
     private OptionWindow? _optionWindow;
     private bool _skipSaveOnClose;
+    private CancellationTokenSource? _toastCancelation;
 
     public MainWindow()
     {
@@ -38,6 +43,9 @@ public partial class MainWindow : Window
             SortByLastExecutedMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.LastExecuted;
             SortByDisplayNameMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.DisplayName;
             SortByFilePathMenuItem.IsChecked = mainVm.Settings.SortOrder == SortOrder.FilePath;
+
+            // エラー通知イベントをハンドル
+            mainVm.ErrorService.ErrorOccurred += OnErrorOccurred;
         }
     }
 
@@ -125,7 +133,14 @@ public partial class MainWindow : Window
     {
         if (DataContext is MainViewModel mainVm)
         {
-            mainVm.Load();
+            try
+            {
+                mainVm.Load();
+            }
+            catch (Exception ex)
+            {
+                mainVm.ErrorService.NotifyError("データの読み込み中にエラーが発生しました。", ex.ToString(), ErrorSeverity.Error);
+            }
         }
     }
 
@@ -436,5 +451,31 @@ public partial class MainWindow : Window
         _optionWindow.Closed += (_, _) => _optionWindow = null;
         _optionWindow.OkClicked += (_, _) => SaveSettings();
         _optionWindow.Show();
+    }
+
+    private void OnErrorOccurred(object? sender, ErrorNotificationEventArgs e)
+    {
+        if (this.FindControl<Border>("ToastPanel") is Border toastPanel &&
+            this.FindControl<TextBlock>("ToastMessage") is TextBlock toastMessage)
+        {
+            toastMessage.Text = e.Entry.UserMessage;
+            toastPanel.IsVisible = true;
+
+            // 既存のタイマーをキャンセル
+            _toastCancelation?.Cancel();
+            _toastCancelation = new();
+
+            // 4秒後にトースト通知を非表示
+            _ = Task.Delay(4000, _toastCancelation.Token).ContinueWith(_ =>
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (!_toastCancelation.Token.IsCancellationRequested)
+                    {
+                        toastPanel.IsVisible = false;
+                    }
+                });
+            });
+        }
     }
 }
