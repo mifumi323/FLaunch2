@@ -60,7 +60,7 @@
       </MenuItem>
     </Menu>
     <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" CornerRadius="6"
-              IsEditable="True" Text="{Binding SearchText}">
+              IsEditable="True" Text="{Binding SearchText}" ItemsSource="{Binding SearchTagOptions}">
     </ComboBox>
     <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DisplayItems}"
              Tapped="OnItemTapped">
@@ -78,7 +78,7 @@
                 <MenuItem Header="削除(_D)" Click="OnContextDeleteClicked"/>
                 <Separator/>
                 <MenuItem Header="プロパティ(_R)" Click="OnContextPropertiesClicked"/>
-                <MenuItem Header="タグ(_T)" Click="OnContextTagClicked"/>
+                <MenuItem x:Name="ContextTagMenuItem" Header="タグ(_T)"/>
               </ContextMenu>
             </Setter.Value>
           </Setter>

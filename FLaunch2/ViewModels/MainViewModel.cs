@@ -32,6 +32,11 @@ public class MainViewModel : ViewModelBase
         get; private set => this.RaiseAndSetIfChanged(ref field, value);
     } = [];
 
+    public IEnumerable<string> SearchTagOptions
+    {
+        get; private set => this.RaiseAndSetIfChanged(ref field, value);
+    } = [];
+
     public string SearchText
     {
         get; set => this.RaiseAndSetIfChanged(ref field, value);
@@ -42,7 +47,12 @@ public class MainViewModel : ViewModelBase
         _iconExtractor = new AssociatedIconExtractor(Settings);
         PropertyChanged += (s, e) =>
         {
-            if (e.PropertyName == nameof(Items) || e.PropertyName == nameof(Settings) || e.PropertyName == nameof(SearchText))
+            if (e.PropertyName == nameof(Items))
+            {
+                UpdateSearchTagOptions();
+                UpdateDiaplayItems();
+            }
+            else if (e.PropertyName == nameof(Settings) || e.PropertyName == nameof(SearchText))
             {
                 UpdateDiaplayItems();
             }
@@ -67,6 +77,15 @@ public class MainViewModel : ViewModelBase
         DisplayItems = [.. sorted.Select(x => new ItemViewModel(x, _iconExtractor))];
     }
 
+    private void UpdateSearchTagOptions()
+    {
+        SearchTagOptions = [.. Item.GetAllTags(Items)
+            .Where(tag => !string.IsNullOrWhiteSpace(tag))
+            .Select(tag => $"#{tag.Trim()}")
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .OrderBy(tag => tag, StringComparer.CurrentCultureIgnoreCase)];
+    }
+
     internal void SetSortOrder(SortOrder sortOrder)
     {
         Settings.SortOrder = sortOrder;
@@ -75,6 +94,17 @@ public class MainViewModel : ViewModelBase
 
     private static bool MatchesSearch(Item item, string search)
     {
+        if (search.StartsWith('#'))
+        {
+            var tagSearch = search[1..].Trim();
+            if (string.IsNullOrEmpty(tagSearch))
+            {
+                return true;
+            }
+
+            return item.Tags.Any(tag => tag != null && tag.Contains(tagSearch, StringComparison.CurrentCultureIgnoreCase));
+        }
+
         return item.DisplayName?.Contains(search, StringComparison.CurrentCultureIgnoreCase) ?? false;
     }
 
@@ -82,6 +112,8 @@ public class MainViewModel : ViewModelBase
     {
         _repository.Upsert(item);
         Items.Add(item);
+        UpdateSearchTagOptions();
+        UpdateDiaplayItems();
     }
 
     internal void Load()
@@ -171,18 +203,23 @@ public class MainViewModel : ViewModelBase
         };
         _repository.Upsert(clone);
         Items.Add(clone);
+        UpdateSearchTagOptions();
+        UpdateDiaplayItems();
     }
 
     internal void DeleteItem(Item item)
     {
         _repository.Delete(item.Id);
         Items.Remove(item);
+        UpdateSearchTagOptions();
         UpdateDiaplayItems();
     }
 
     internal void UpdateItem(Item item)
     {
         _repository.Upsert(item);
+        UpdateSearchTagOptions();
+        UpdateDiaplayItems();
     }
 
     private void UpdateItems(ObservableCollection<Item> items)

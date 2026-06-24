@@ -159,11 +159,20 @@ public partial class MainWindow : Window
 
     private void OnContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        if (sender is ContextMenu contextMenu &&
-            contextMenu.PlacementTarget is ListBoxItem listBoxItem)
+        if (sender is not ContextMenu contextMenu)
         {
-            ItemListBox.SelectedItem = listBoxItem.DataContext;
+            return;
         }
+
+        var contextItem = (contextMenu.PlacementTarget as ListBoxItem)?.DataContext
+            ?? contextMenu.DataContext;
+
+        if (contextItem is not null)
+        {
+            ItemListBox.SelectedItem = contextItem;
+        }
+
+        PopulateContextTagMenu(contextMenu);
     }
 
     private Item? GetSelectedItem()
@@ -237,9 +246,75 @@ public partial class MainWindow : Window
         }
     }
 
-    private void OnContextTagClicked(object? sender, RoutedEventArgs e)
+    private void PopulateContextTagMenu(ContextMenu contextMenu)
     {
-        // TODO: タグ編集機能を実装
+
+        if (DataContext is not MainViewModel mainVm || GetSelectedItem() is not { } selectedItem)
+        {
+            ContextTagMenuItem.ItemsSource = Array.Empty<object>();
+            ContextTagMenuItem.IsEnabled = false;
+            return;
+        }
+
+        var knownTags = Item.GetAllTags(mainVm.Items)
+            .Where(tag => !string.IsNullOrWhiteSpace(tag))
+            .OrderBy(tag => tag, StringComparer.CurrentCultureIgnoreCase)
+            .ToArray();
+
+        if (knownTags.Length == 0)
+        {
+            ContextTagMenuItem.ItemsSource = new object[]
+            {
+                new MenuItem
+                {
+                    Header = "（既知のタグはありません）",
+                    IsEnabled = false,
+                },
+            };
+            ContextTagMenuItem.IsEnabled = true;
+            return;
+        }
+
+        var menuItems = knownTags
+            .Select(tag =>
+            {
+                var menuItem = new MenuItem
+                {
+                    Header = tag,
+                    ToggleType = MenuItemToggleType.CheckBox,
+                    IsChecked = selectedItem.Tags.Contains(tag),
+                };
+                menuItem.Click += (_, _) => ToggleTag(mainVm, selectedItem, tag, menuItem.IsChecked);
+                return menuItem;
+            })
+            .ToArray();
+
+        ContextTagMenuItem.ItemsSource = menuItems;
+        ContextTagMenuItem.IsEnabled = true;
+    }
+
+    private static void ToggleTag(MainViewModel mainVm, Item item, string tag, bool isChecked)
+    {
+        var tags = item.Tags
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .ToList();
+
+        var existingIndex = tags.FindIndex(x => string.Equals(x, tag, StringComparison.CurrentCultureIgnoreCase));
+        if (isChecked)
+        {
+            if (existingIndex < 0)
+            {
+                tags.Add(tag);
+            }
+        }
+        else if (existingIndex >= 0)
+        {
+            tags.RemoveAt(existingIndex);
+        }
+
+        item.Tags = [.. tags];
+        mainVm.UpdateItem(item);
     }
 
     private async void OnExportAsJsonClicked(object? sender, RoutedEventArgs e)
