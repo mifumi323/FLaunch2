@@ -78,7 +78,7 @@
                 <MenuItem Header="削除(_D)" Click="OnContextDeleteClicked"/>
                 <Separator/>
                 <MenuItem Header="プロパティ(_R)" Click="OnContextPropertiesClicked"/>
-                <MenuItem Header="タグ(_T)" Click="OnContextTagClicked"/>
+                <MenuItem x:Name="ContextTagMenuItem" Header="タグ(_T)"/>
               </ContextMenu>
             </Setter.Value>
           </Setter>
