@@ -21,6 +21,7 @@ public class ItemEditViewModel : ViewModelBase
     private string _arguments = string.Empty;
     private string _workingDirectory = string.Empty;
     private string _comment = string.Empty;
+    private bool _runAsAdministrator;
     private string _newTag = string.Empty;
     private ItemType _itemType = ItemType.NativeApp;
 
@@ -40,6 +41,7 @@ public class ItemEditViewModel : ViewModelBase
         Arguments = item.Arguments;
         WorkingDirectory = item.WorkingDirectory;
         Comment = item.Comment;
+        RunAsAdministrator = item.RunAsAdministrator;
         ItemType = item.ItemType;
 
         foreach (var tag in allTags)
@@ -89,6 +91,12 @@ public class ItemEditViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _comment, value);
     }
 
+    public bool RunAsAdministrator
+    {
+        get => _runAsAdministrator;
+        set => this.RaiseAndSetIfChanged(ref _runAsAdministrator, value);
+    }
+
     public string NewTag
     {
         get => _newTag;
@@ -117,6 +125,7 @@ public class ItemEditViewModel : ViewModelBase
         item.Arguments = Arguments;
         item.WorkingDirectory = WorkingDirectory;
         item.Comment = Comment;
+        item.RunAsAdministrator = RunAsAdministrator;
         item.ItemType = ItemType;
 
         var tags = TagItems
