@@ -409,6 +409,7 @@ public partial class MainWindow : Window
             AllowMultiple = false,
             FileTypeFilter =
             [
+                new FilePickerFileType("JSONファイル") { Patterns = ["*.json"] },
                 new FilePickerFileType("TSVファイル") { Patterns = ["*.tsv"] },
                 new FilePickerFileType("すべてのファイル") { Patterns = ["*"] },
             ],
@@ -419,9 +420,16 @@ public partial class MainWindow : Window
             return;
         }
 
-        var filePath = files[0].Path.LocalPath;
-
-        var items = FLaunch1Reader.ReadItems(filePath).ToArray();
+        Item[] items;
+        try
+        {
+            items = await ReadImportItemsAsync(files[0]);
+        }
+        catch (Exception ex)
+        {
+            mainVm.ErrorService.NotifyError("インポートファイルの読み込み中にエラーが発生しました。", ex.Message, ErrorSeverity.Warning);
+            return;
+        }
 
         var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
         _importWindow?.Close();
@@ -433,6 +441,18 @@ public partial class MainWindow : Window
         _importWindow.Closed += (_, _) => _importWindow = null;
 
         _importWindow.Show();
+    }
+
+    private static async Task<Item[]> ReadImportItemsAsync(IStorageFile file)
+    {
+        if (string.Equals(Path.GetExtension(file.Name), ".json", StringComparison.OrdinalIgnoreCase))
+        {
+            await using var stream = await file.OpenReadAsync();
+            var items = await JsonSerializer.DeserializeAsync<Item[]>(stream);
+            return items ?? [];
+        }
+
+        return FLaunch1Reader.ReadItems(file.Path.LocalPath).ToArray();
     }
 
     private void ImportWindow_ImportClicked(object? sender, EventArgs e)
