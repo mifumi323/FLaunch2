@@ -28,7 +28,7 @@
     </StackPanel>
 
     <!-- フォーム本体 -->
-    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*,Auto">
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto">
       <!-- 表示名 -->
       <Label Grid.Row="0" Grid.Column="0" Content="表示名(_N)" Target="txtName"
              VerticalAlignment="Center" Margin="0,0,8,4" />
@@ -59,17 +59,23 @@
       <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtComment"
                Text="{Binding Comment}" Margin="0,0,0,4" />
 
-      <!-- アイテムタイプ -->
-      <Label Grid.Row="5" Grid.Column="0" Content="タイプ(_Y)" Target="cbItemType"
+      <!-- 管理者実行 -->
+      <Label Grid.Row="5" Grid.Column="0" Content="管理者実行(_R)" Target="chkRunAsAdmin"
              VerticalAlignment="Center" Margin="0,0,8,4" />
-      <ComboBox Grid.Row="5" Grid.Column="1" x:Name="cbItemType"
+      <CheckBox Grid.Row="5" Grid.Column="1" x:Name="chkRunAsAdmin"
+                IsChecked="{Binding RunAsAdministrator}" Margin="0,0,0,4" />
+
+      <!-- アイテムタイプ -->
+      <Label Grid.Row="6" Grid.Column="0" Content="タイプ(_Y)" Target="cbItemType"
+             VerticalAlignment="Center" Margin="0,0,8,4" />
+      <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbItemType"
                 ItemsSource="{Binding ItemTypes}"
                 SelectedItem="{Binding ItemType}" Margin="0,0,0,4" />
 
       <!-- タグ -->
-      <Label Grid.Row="6" Grid.Column="0" Content="タグ(_T)"
+      <Label Grid.Row="7" Grid.Column="0" Content="タグ(_T)"
              VerticalAlignment="Top" Margin="0,4,8,4" />
-      <ListBox Grid.Row="6" Grid.Column="1"
+      <ListBox Grid.Row="7" Grid.Column="1"
                ItemsSource="{Binding TagItems}" Margin="0,0,0,4"
                SelectionMode="Multiple,Toggle">
         <ListBox.ItemTemplate>
@@ -80,9 +86,9 @@
       </ListBox>
 
       <!-- 一覧にないタグ -->
-      <Label Grid.Row="7" Grid.Column="0" Content="一覧にないタグ(_G)" Target="txtNewTag"
+      <Label Grid.Row="8" Grid.Column="0" Content="一覧にないタグ(_G)" Target="txtNewTag"
              VerticalAlignment="Center" Margin="0,0,8,0" />
-      <TextBox Grid.Row="7" Grid.Column="1" x:Name="txtNewTag"
+      <TextBox Grid.Row="8" Grid.Column="1" x:Name="txtNewTag"
                Text="{Binding NewTag}" />
     </Grid>
   </DockPanel>

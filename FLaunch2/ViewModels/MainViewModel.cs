@@ -157,7 +157,7 @@ public class MainViewModel : ViewModelBase
                 },
                 _ => throw new NotImplementedException(),
             };
-            if (runas)
+            if (runas || item.RunAsAdministrator)
             {
                 psi.Verb = "runas";
             }
@@ -199,6 +199,7 @@ public class MainViewModel : ViewModelBase
             WorkingDirectory = item.WorkingDirectory,
             Arguments = item.Arguments,
             Comment = item.Comment,
+            RunAsAdministrator = item.RunAsAdministrator,
             Tags = [.. item.Tags],
         };
         _repository.Upsert(clone);

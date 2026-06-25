@@ -13,6 +13,7 @@ namespace FLaunch2.Models
         public DateTimeOffset LastExecuted { get; set; }
         public string Arguments { get; set => field = value ?? string.Empty; } = string.Empty;
         public string Comment { get; set => field = value ?? string.Empty; } = string.Empty;
+        public bool RunAsAdministrator { get; set; }
         public string[] Tags { get; set; } = [];
         public ItemType ItemType { get; set; } = ItemType.NativeApp;
 
