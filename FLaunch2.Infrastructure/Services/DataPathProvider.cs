@@ -6,7 +6,11 @@
 public class DataPathProvider
 {
     private const string VendorName = "MifuminSoft";
+#if DEBUG
+    private const string AppFolderName = "FLaunch2.Debug";
+#else
     private const string AppFolderName = "FLaunch2";
+#endif
     private const string DatabaseFileName = "items.db";
     private const string SettingsFileName = "settings.json";
 
