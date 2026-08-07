@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FLaunch2.ViewModels;
 
@@ -131,7 +132,12 @@ public class MainViewModel : ViewModelBase
         _settingsRepository.Save(Settings);
     }
 
-    internal void ExecuteItem(Item item, bool runas = false)
+    internal async void ExecuteItemAsync(Item item, bool runas = false)
+    {
+        await Task.Run(() => ExecuteItemCore(item, runas));
+    }
+
+    private void ExecuteItemCore(Item item, bool runas = false)
     {
         if (string.IsNullOrWhiteSpace(item.FilePath))
             return;
