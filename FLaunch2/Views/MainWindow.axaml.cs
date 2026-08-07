@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -152,7 +151,8 @@ public partial class MainWindow : Window
 
             if (DataContext is MainViewModel mainVm)
             {
-                mainVm.ExecuteItem(itemVm.Item);
+                Hide();
+                mainVm.ExecuteItemAsync(itemVm.Item);
             }
         }
     }
@@ -184,7 +184,8 @@ public partial class MainWindow : Window
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
-            mainVm.ExecuteItem(item);
+            Hide();
+            mainVm.ExecuteItemAsync(item);
         }
     }
 
@@ -192,7 +193,8 @@ public partial class MainWindow : Window
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
-            mainVm.ExecuteItem(item, runas: true);
+            Hide();
+            mainVm.ExecuteItemAsync(item, runas: true);
         }
     }
 
