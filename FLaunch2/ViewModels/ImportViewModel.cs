@@ -10,12 +10,12 @@ namespace FLaunch2.ViewModels;
 
 public class ImportViewModel : ViewModelBase
 {
-    public ImportViewModel(IEnumerable<Item> items, IEnumerable<Item> existingItems, ItemEquivalenceCondition condition, IIconExtractor iconExtractor)
+    public ImportViewModel(IEnumerable<Item> items, IEnumerable<Item> existingItems, ItemEquivalenceCondition condition, IIconExtractor iconExtractor, AppSettings settings)
     {
         var existing = existingItems.ToArray();
 
         Items = new ObservableCollection<ImportItemViewModel>(
-            items.Select(i => new ImportItemViewModel(i, iconExtractor)
+            items.Select(i => new ImportItemViewModel(i, iconExtractor, settings)
             {
                 IsSelected = !existing.Any(e => i.Equals(e, condition))
             }));
