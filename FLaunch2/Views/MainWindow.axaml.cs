@@ -454,7 +454,7 @@ public partial class MainWindow : Window
             return items ?? [];
         }
 
-        return FLaunch1Reader.ReadItems(file.Path.LocalPath).ToArray();
+        return [.. FLaunch1Reader.ReadItems(file.Path.LocalPath)];
     }
 
     private void ImportWindow_ImportClicked(object? sender, EventArgs e)
