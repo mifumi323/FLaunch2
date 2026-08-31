@@ -385,7 +385,7 @@ public partial class MainWindow : Window
             .OrderBy(i => i.DisplayName)
             .ToArray();
 
-        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
+        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor, mainVm.Settings);
         _importWindow?.Close();
         _importWindow = new ImportWindow
         {
@@ -433,7 +433,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor);
+        var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor, mainVm.Settings);
         _importWindow?.Close();
         _importWindow = new ImportWindow
         {

@@ -38,6 +38,11 @@
         </Border>
 
         <CheckBox Content="環境変数の展開" IsChecked="{Binding ExpandEnvironmentVariables}" />
+
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="8">
+          <Label Grid.Row="0" Grid.Column="0" Content="アイテムの余白" VerticalAlignment="Center" />
+          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ItemMargin}" />
+        </Grid>
       </StackPanel>
     </ScrollViewer>
   </DockPanel>

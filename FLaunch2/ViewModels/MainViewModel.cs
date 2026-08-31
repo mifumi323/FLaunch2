@@ -75,7 +75,7 @@ public class MainViewModel : ViewModelBase
             SortOrder.FilePath => items.OrderBy(x => x.FilePath, StringComparer.CurrentCultureIgnoreCase),
             _ => items.OrderByDescending(x => x.Score).ThenByDescending(x => x.LastExecuted),
         };
-        DisplayItems = [.. sorted.Select(x => new ItemViewModel(x, _iconExtractor))];
+        DisplayItems = [.. sorted.Select(x => new ItemViewModel(x, _iconExtractor, Settings))];
     }
 
     private void UpdateSearchTagOptions()

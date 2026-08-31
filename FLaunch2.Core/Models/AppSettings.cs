@@ -39,4 +39,9 @@ public class AppSettings
     /// 環境変数を展開するかどうか
     /// </summary>
     public bool ExpandEnvironmentVariables { get; set; } = true;
+
+    /// <summary>
+    /// アイテムの余白サイズ
+    /// </summary>
+    public double ItemMargin { get; set; } = 5;
 }
