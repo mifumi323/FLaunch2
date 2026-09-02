@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace FLaunch2.Services;
@@ -13,6 +15,37 @@ public partial class WindowLocator
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool GetCursorPos(out POINT lpPoint);
+
+    private static Screen? ResolveScreen(Window window, PixelPoint point)
+    {
+        var screens = window.Screens;
+        var direct = screens.ScreenFromPoint(point);
+        if (direct is not null)
+        {
+            return direct;
+        }
+
+        var fallback = screens.All
+            .OrderBy(screen => DistanceSquaredToBounds(point, screen.Bounds))
+            .FirstOrDefault();
+        if (fallback is not null)
+        {
+            return fallback;
+        }
+
+        return screens.Primary;
+    }
+
+    private static long DistanceSquaredToBounds(PixelPoint point, PixelRect bounds)
+    {
+        var dx = point.X < bounds.X ? bounds.X - point.X :
+            point.X > bounds.Right ? point.X - bounds.Right :
+            0;
+        var dy = point.Y < bounds.Y ? bounds.Y - point.Y :
+            point.Y > bounds.Bottom ? point.Y - bounds.Bottom :
+            0;
+        return (long)dx * dx + (long)dy * dy;
+    }
 
     public void Locate(Window window)
     {
@@ -27,8 +60,12 @@ public partial class WindowLocator
         GetCursorPos(out var point);
         var mousePos = new PixelPoint(point.X, point.Y);
 
-        var screen = window.Screens.ScreenFromPoint(mousePos);
-        if (screen == null) return;
+        var screen = ResolveScreen(window, mousePos);
+        if (screen == null)
+        {
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            return;
+        }
         var scaling = screen.Scaling;
 
         var screenRect = screen.Bounds;

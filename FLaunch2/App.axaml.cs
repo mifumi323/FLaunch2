@@ -14,7 +14,10 @@ namespace FLaunch2;
 
 public partial class App : Application
 {
-    private MainWindow? _mainWindow = null;
+    private IClassicDesktopStyleApplicationLifetime? _desktop;
+    private MainWindow? _mainWindow;
+    private bool _isExiting;
+    private bool _skipSaveSettings;
 
     public override void Initialize()
     {
@@ -25,6 +28,8 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            _desktop = desktop;
+
             var filePath = desktop.Args?.FirstOrDefault();
             if (!string.IsNullOrEmpty(filePath))
             {
@@ -40,7 +45,7 @@ public partial class App : Application
                     Score = Item.CalculateInitialScore(allItems, settings.InitialScoreRate),
                 };
                 ItemEditViewModel itemEditViewModel = new(item, Item.GetAllTags(allItems), isNew: true);
-                itemEditViewModel.OkPressed += (sender, e) =>
+                itemEditViewModel.OkPressed += (_, _) =>
                 {
                     itemEditViewModel.ApplyTo(item);
                     itemRepository.Upsert(item);
@@ -52,19 +57,12 @@ public partial class App : Application
             }
             else
             {
-                // 通常起動（非表示で起動）
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-                _mainWindow = new MainWindow
-                {
-                    DataContext = new MainViewModel(),
-                };
-                _mainWindow.LoadSettings();
-                _mainWindow.Closed += (_, _) => desktop.Shutdown();
             }
 
             if (TrayIcon.GetIcons(this)?.FirstOrDefault() is TrayIcon trayIcon)
             {
-                if (_mainWindow is not null)
+                if (string.IsNullOrEmpty(filePath))
                 {
                     trayIcon.Clicked += OnTrayIconClicked;
                 }
@@ -78,8 +76,57 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    internal void ExitApplication(bool skipSaveSettings = false)
+    {
+        if (_desktop is null)
+        {
+            return;
+        }
+
+        _isExiting = true;
+        _skipSaveSettings = skipSaveSettings;
+
+        foreach (var window in _desktop.Windows.Where(x => x != _mainWindow).ToArray())
+        {
+            window.Close();
+        }
+
+        _mainWindow?.Close();
+        _desktop.Shutdown();
+    }
+
     private void OnTrayIconClicked(object? sender, EventArgs e)
     {
-        _mainWindow?.Display();
+        if (_isExiting)
+        {
+            return;
+        }
+
+        if (_mainWindow is null)
+        {
+            _mainWindow = new MainWindow
+            {
+                DataContext = new MainViewModel(),
+            };
+            _mainWindow.LoadSettings();
+            _mainWindow.Closed += OnMainWindowClosed;
+        }
+
+        _mainWindow.Display();
+    }
+
+    private void OnMainWindowClosed(object? sender, EventArgs e)
+    {
+        if (sender is MainWindow mainWindow)
+        {
+            if (!_skipSaveSettings)
+            {
+                mainWindow.SaveSettings();
+            }
+            mainWindow.Closed -= OnMainWindowClosed;
+        }
+
+        _mainWindow = null;
+        _skipSaveSettings = false;
     }
 }
