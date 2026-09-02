@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -22,7 +23,6 @@ public partial class MainWindow : Window
     private ImportWindow? _importWindow;
     private ConfirmWindow? _confirmWindow;
     private OptionWindow? _optionWindow;
-    private bool _skipSaveOnClose;
     private CancellationTokenSource? _toastCancelation;
 
     public MainWindow()
@@ -48,7 +48,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void SaveSettings()
+    internal void SaveSettings()
     {
         if (DataContext is MainViewModel mainVm)
         {
@@ -65,12 +65,15 @@ public partial class MainWindow : Window
 
     private void OnDeactivated(object? sender, System.EventArgs e)
     {
-        Hide();
+        Close();
     }
 
     private void OnExitClicked(object? sender, RoutedEventArgs e)
     {
-        Close();
+        if (Application.Current is App app)
+        {
+            app.ExitApplication();
+        }
     }
 
     private async void OnAddClicked(object? sender, RoutedEventArgs e)
@@ -108,19 +111,6 @@ public partial class MainWindow : Window
         _itemEditWindow.Show();
     }
 
-    private void Window_Closed(object? sender, System.EventArgs e)
-    {
-        _itemEditWindow?.Close();
-        _aboutWindow?.Close();
-        _importWindow?.Close();
-        _confirmWindow?.Close();
-        _optionWindow?.Close();
-        if (!_skipSaveOnClose)
-        {
-            SaveSettings();
-        }
-    }
-
     internal void Display()
     {
         Locate();
@@ -151,7 +141,7 @@ public partial class MainWindow : Window
 
             if (DataContext is MainViewModel mainVm)
             {
-                Hide();
+                Close();
                 mainVm.ExecuteItemAsync(itemVm.Item);
             }
         }
@@ -184,7 +174,7 @@ public partial class MainWindow : Window
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
-            Hide();
+            Close();
             mainVm.ExecuteItemAsync(item);
         }
     }
@@ -193,7 +183,7 @@ public partial class MainWindow : Window
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
-            Hide();
+            Close();
             mainVm.ExecuteItemAsync(item, runas: true);
         }
     }
@@ -478,8 +468,10 @@ public partial class MainWindow : Window
         Confirm("すべてのデータを消して終了しますか？\nこの操作は元に戻せません。", () =>
         {
             mainVm.DeleteAllData();
-            _skipSaveOnClose = true;
-            Close();
+            if (Application.Current is App app)
+            {
+                app.ExitApplication(skipSaveSettings: true);
+            }
         });
     }
 

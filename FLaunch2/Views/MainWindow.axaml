@@ -16,7 +16,6 @@
         CanMaximize="False"
         CanMinimize="False"
         Activated="Window_Activated"
-        Closed="Window_Closed"
         Title="FLaunch2">
   <Design.DataContext>
     <vm:MainViewModel />
