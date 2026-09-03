@@ -44,4 +44,9 @@ public class AppSettings
     /// アイテムの余白サイズ
     /// </summary>
     public double ItemMargin { get; set; } = 5;
+
+    /// <summary>
+    /// アイコンとテキスト間の余白サイズ
+    /// </summary>
+    public double IconMargin { get; set; } = 5;
 }

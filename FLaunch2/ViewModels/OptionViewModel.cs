@@ -47,6 +47,11 @@ public class OptionViewModel : ViewModelBase
         get; set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public double IconMargin
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public OptionViewModel(AppSettings settings)
     {
         _settings = settings;
@@ -64,6 +69,7 @@ public class OptionViewModel : ViewModelBase
         _settings.ItemEquivalence.Arguments = ItemEquivalenceArguments;
         _settings.ExpandEnvironmentVariables = ExpandEnvironmentVariables;
         _settings.ItemMargin = ItemMargin;
+        _settings.IconMargin = IconMargin;
     }
 
     private void RestoreSettings()
@@ -79,5 +85,6 @@ public class OptionViewModel : ViewModelBase
 
         ExpandEnvironmentVariables = _settings.ExpandEnvironmentVariables;
         ItemMargin = _settings.ItemMargin;
+        IconMargin = _settings.IconMargin;
     }
 }
