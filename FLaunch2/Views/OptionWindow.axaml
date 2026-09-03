@@ -39,9 +39,12 @@
 
         <CheckBox Content="環境変数の展開" IsChecked="{Binding ExpandEnvironmentVariables}" />
 
-        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="8">
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="8" ColumnSpacing="8">
           <Label Grid.Row="0" Grid.Column="0" Content="アイテムの余白" VerticalAlignment="Center" />
           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ItemMargin}" />
+
+          <Label Grid.Row="1" Grid.Column="0" Content="アイコン間の余白" VerticalAlignment="Center" />
+          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IconMargin}" />
         </Grid>
       </StackPanel>
     </ScrollViewer>

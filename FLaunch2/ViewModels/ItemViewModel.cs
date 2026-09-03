@@ -13,7 +13,8 @@ public class ItemViewModel(Item item, IIconExtractor iconExtractor, AppSettings 
     private bool _iconLoading;
 
     public Item Item { get; } = item;
-    public Thickness ItemMargin => new(settings.ItemMargin);
+    public Thickness IconMargin => new(settings.ItemMargin, settings.ItemMargin, settings.IconMargin, settings.ItemMargin);
+    public Thickness TextMargin => new(0, settings.ItemMargin, settings.ItemMargin, settings.ItemMargin);
 
     public string DisplayName => Item.DisplayName;
 
