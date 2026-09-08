@@ -81,6 +81,7 @@
               </ContextMenu>
             </Setter.Value>
           </Setter>
+          <Setter Property="Padding" Value="0" />
         </Style>
       </ListBox.Styles>
       <ListBox.ItemTemplate>
