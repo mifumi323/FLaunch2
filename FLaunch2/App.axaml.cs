@@ -107,6 +107,7 @@ public partial class App : Application
             _mainWindow = new MainWindow
             {
                 DataContext = new MainViewModel(),
+                Desktop = _desktop,
             };
             _mainWindow.LoadSettings();
             _mainWindow.Closed += OnMainWindowClosed;
