@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -18,12 +19,10 @@ namespace FLaunch2.Views;
 public partial class MainWindow : Window
 {
     private readonly WindowLocator _windowLocator = new();
-    private ItemEditWindow? _itemEditWindow;
-    private AboutWindow? _aboutWindow;
-    private ImportWindow? _importWindow;
-    private ConfirmWindow? _confirmWindow;
     private OptionWindow? _optionWindow;
     private CancellationTokenSource? _toastCancelation;
+
+    public IClassicDesktopStyleApplicationLifetime? Desktop { get; set; }
 
     public MainWindow()
     {
@@ -101,14 +100,13 @@ public partial class MainWindow : Window
 
     private void OpenItemEditWindow(ItemEditViewModel vm)
     {
-        _itemEditWindow?.Close();
-        _itemEditWindow = new ItemEditWindow
+        Desktop?.Windows.Where(w => w is ItemEditWindow).ToList().ForEach(w => w.Close());
+        var itemEditWindow = new ItemEditWindow
         {
             DataContext = vm,
         };
-        _itemEditWindow.Closed += (_, _) => _itemEditWindow = null;
 
-        _itemEditWindow.Show();
+        itemEditWindow.Show();
     }
 
     internal void Display()
@@ -376,15 +374,19 @@ public partial class MainWindow : Window
             .ToArray();
 
         var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor, mainVm.Settings);
-        _importWindow?.Close();
-        _importWindow = new ImportWindow
+        OpenImportWindow(importVm);
+    }
+
+    private void OpenImportWindow(ImportViewModel importVm)
+    {
+        Desktop?.Windows.Where(w => w is ImportWindow).ToList().ForEach(w => w.Close());
+        var importWindow = new ImportWindow
         {
             DataContext = importVm,
         };
-        _importWindow.ImportClicked += ImportWindow_ImportClicked;
-        _importWindow.Closed += (_, _) => _importWindow = null;
+        importWindow.ImportClicked += ImportWindow_ImportClicked;
 
-        _importWindow.Show();
+        importWindow.Show();
     }
 
     private async void OnImportFromFilesClicked(object? sender, RoutedEventArgs e)
@@ -424,15 +426,7 @@ public partial class MainWindow : Window
         }
 
         var importVm = new ImportViewModel(items, mainVm.Items, mainVm.Settings.ItemEquivalence, mainVm.IconExtractor, mainVm.Settings);
-        _importWindow?.Close();
-        _importWindow = new ImportWindow
-        {
-            DataContext = importVm,
-        };
-        _importWindow.ImportClicked += ImportWindow_ImportClicked;
-        _importWindow.Closed += (_, _) => _importWindow = null;
-
-        _importWindow.Show();
+        OpenImportWindow(importVm);
     }
 
     private static async Task<Item[]> ReadImportItemsAsync(IStorageFile file)
@@ -477,24 +471,30 @@ public partial class MainWindow : Window
 
     private void Confirm(string message, Action onConfirmed)
     {
-        _confirmWindow?.Close();
-        _confirmWindow = new ConfirmWindow(message);
-        _confirmWindow.Closed += (_, _) =>
+
+        Desktop?.Windows.Where(w => w is ConfirmWindow).ToList().ForEach(w => w.Close());
+        var confirmWindow = new ConfirmWindow(message);
+        confirmWindow.Closed += (_, _) =>
         {
-            if (_confirmWindow.Confirmed)
+            if (confirmWindow.Confirmed)
             {
                 onConfirmed();
             }
         };
-        _confirmWindow.Show();
+        confirmWindow.Show();
     }
 
     private void OnAboutClicked(object? sender, RoutedEventArgs e)
     {
-        _aboutWindow?.Close();
-        _aboutWindow = new AboutWindow();
-        _aboutWindow.Closed += (_, _) => _aboutWindow = null;
-        _aboutWindow.Show();
+        var existingAboutWindow = Desktop?.Windows.FirstOrDefault(w => w is AboutWindow);
+        if (existingAboutWindow is not null)
+        {
+            existingAboutWindow.Hide();
+            existingAboutWindow.Show();
+            return;
+        }
+        var aboutWindow = new AboutWindow();
+        aboutWindow.Show();
     }
 
     private void OnSortByScoreClicked(object? sender, RoutedEventArgs e)
@@ -531,15 +531,20 @@ public partial class MainWindow : Window
         {
             return;
         }
+        var existingOptionWindow = Desktop?.Windows.FirstOrDefault(w => w is OptionWindow);
+        if (existingOptionWindow is not null)
+        {
+            existingOptionWindow.Hide();
+            existingOptionWindow.Show();
+            return;
+        }
         var vm = new OptionViewModel(mainVm.Settings);
-        _optionWindow?.Close();
-        _optionWindow = new OptionWindow
+        var optionWindow = new OptionWindow
         {
             DataContext = vm,
         };
-        _optionWindow.Closed += (_, _) => _optionWindow = null;
-        _optionWindow.OkClicked += (_, _) => SaveSettings();
-        _optionWindow.Show();
+        optionWindow.OkClicked += (_, _) => SaveSettings();
+        optionWindow.Show();
     }
 
     private void OnErrorOccurred(object? sender, ErrorNotificationEventArgs e)
