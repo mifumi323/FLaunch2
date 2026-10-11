@@ -1,3 +1,4 @@
+using Avalonia;
 using FLaunch2.Models;
 using FLaunch2.Services;
 using ReactiveUI;
@@ -8,6 +9,7 @@ public class ImportItemViewModel(Item item, IIconExtractor iconExtractor, AppSet
 {
     public Item Item { get; } = item;
     public ItemViewModel ItemViewModel => new(Item, iconExtractor, settings);
+    public Thickness CheckBoxMargin => new(settings.ItemMargin, 0, 0, 0);
 
     public string DisplayName => Item.DisplayName;
     public string FilePath => Item.FilePath;
