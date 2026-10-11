@@ -9,6 +9,6 @@
              >
   <StackPanel Orientation="Horizontal">
     <Image Width="16" Height="16" Margin="{Binding IconMargin}" Source="{Binding Icon}" />
-    <TextBlock Margin="{Binding TextMargin}" Text="{Binding DisplayName}" />
+    <TextBlock Margin="{Binding TextMargin}" Text="{Binding DisplayName}" VerticalAlignment="Center" />
   </StackPanel>
 </UserControl>
