@@ -16,15 +16,6 @@ internal static class ItemTypeExtensions
 
 public class ItemEditViewModel : ViewModelBase
 {
-    private string _displayName = string.Empty;
-    private string _filePath = string.Empty;
-    private string _arguments = string.Empty;
-    private string _workingDirectory = string.Empty;
-    private string _comment = string.Empty;
-    private bool _runAsAdministrator;
-    private string _newTag = string.Empty;
-    private ItemType _itemType = ItemType.NativeApp;
-
     public ItemEditViewModel()
     {
         OkCommand = ReactiveCommand.Create<Window>(OnOk);
@@ -61,53 +52,50 @@ public class ItemEditViewModel : ViewModelBase
     /// <summary>キャンセルが押されたときに発火するイベント</summary>
     public event EventHandler? CancelPressed;
 
+    public string WindowTitle
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "項目の編集";
+
     public string DisplayName
     {
-        get => _displayName;
-        set => this.RaiseAndSetIfChanged(ref _displayName, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
     public string FilePath
     {
-        get => _filePath;
-        set => this.RaiseAndSetIfChanged(ref _filePath, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
     public string Arguments
     {
-        get => _arguments;
-        set => this.RaiseAndSetIfChanged(ref _arguments, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
     public string WorkingDirectory
     {
-        get => _workingDirectory;
-        set => this.RaiseAndSetIfChanged(ref _workingDirectory, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
     public string Comment
     {
-        get => _comment;
-        set => this.RaiseAndSetIfChanged(ref _comment, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
     public bool RunAsAdministrator
     {
-        get => _runAsAdministrator;
-        set => this.RaiseAndSetIfChanged(ref _runAsAdministrator, value);
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
     public string NewTag
     {
-        get => _newTag;
-        set => this.RaiseAndSetIfChanged(ref _newTag, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = string.Empty;
 
     public ItemType ItemType
     {
-        get => _itemType;
-        set => this.RaiseAndSetIfChanged(ref _itemType, value);
-    }
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = ItemType.NativeApp;
 
     public ObservableCollection<TagItemViewModel> TagItems { get; } = [];
 
