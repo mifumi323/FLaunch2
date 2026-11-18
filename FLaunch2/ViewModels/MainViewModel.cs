@@ -196,24 +196,6 @@ public class MainViewModel : ViewModelBase
             : path;
     }
 
-    internal void DuplicateItem(Item item)
-    {
-        var clone = new Item
-        {
-            DisplayName = item.DisplayName,
-            FilePath = item.FilePath,
-            WorkingDirectory = item.WorkingDirectory,
-            Arguments = item.Arguments,
-            Comment = item.Comment,
-            RunAsAdministrator = item.RunAsAdministrator,
-            Tags = [.. item.Tags],
-        };
-        _repository.Upsert(clone);
-        Items.Add(clone);
-        UpdateSearchTagOptions();
-        UpdateDiaplayItems();
-    }
-
     internal void DeleteItem(Item item)
     {
         _repository.Delete(item.Id);
