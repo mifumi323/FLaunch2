@@ -204,10 +204,32 @@ public partial class MainWindow : Window
 
     private void OnContextDuplicateClicked(object? sender, RoutedEventArgs e)
     {
-        if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
+        if (!(GetSelectedItem() is { } item) || DataContext is not MainViewModel mainVm)
         {
-            mainVm.DuplicateItem(item);
+            return;
         }
+
+        var clone = new Item()
+        {
+            DisplayName = item.DisplayName,
+            FilePath = item.FilePath,
+            WorkingDirectory = item.WorkingDirectory,
+            Arguments = item.Arguments,
+            Comment = item.Comment,
+            RunAsAdministrator = item.RunAsAdministrator,
+            Tags = [.. item.Tags],
+            Score = Item.CalculateInitialScore(mainVm.Items, mainVm.Settings.InitialScoreRate),
+        };
+        var vm = new ItemEditViewModel(clone, Item.GetAllTags(mainVm.Items), isNew: true);
+
+        vm.OkPressed += (_, _) =>
+        {
+            // Add the new item to the collection
+            vm.ApplyTo(clone);
+            mainVm.AddItem(clone);
+        };
+
+        OpenItemEditWindow(vm);
     }
 
     private void OnContextDeleteClicked(object? sender, RoutedEventArgs e)
