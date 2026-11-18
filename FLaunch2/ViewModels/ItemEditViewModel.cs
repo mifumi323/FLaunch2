@@ -52,6 +52,11 @@ public class ItemEditViewModel : ViewModelBase
     /// <summary>キャンセルが押されたときに発火するイベント</summary>
     public event EventHandler? CancelPressed;
 
+    public string WindowTitle
+    {
+        get; set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "項目の編集";
+
     public string DisplayName
     {
         get; set => this.RaiseAndSetIfChanged(ref field, value);

@@ -10,7 +10,7 @@
         Width="624" Height="441"
         MinWidth="400" MinHeight="300"
         CanMaximize="False"
-        Title="項目の編集">
+        Title="{Binding WindowTitle}">
   <Design.DataContext>
     <vm:ItemEditViewModel />
   </Design.DataContext>

@@ -86,7 +86,7 @@ public partial class MainWindow : Window
         {
             Score = Item.CalculateInitialScore(mainVm.Items, mainVm.Settings.InitialScoreRate),
         };
-        var vm = new ItemEditViewModel(item, Item.GetAllTags(mainVm.Items), isNew: true);
+        var vm = new ItemEditViewModel(item, Item.GetAllTags(mainVm.Items), isNew: true) { WindowTitle = "項目の追加" };
 
         vm.OkPressed += (_, _) =>
         {
@@ -220,7 +220,7 @@ public partial class MainWindow : Window
             Tags = [.. item.Tags],
             Score = Item.CalculateInitialScore(mainVm.Items, mainVm.Settings.InitialScoreRate),
         };
-        var vm = new ItemEditViewModel(clone, Item.GetAllTags(mainVm.Items), isNew: true);
+        var vm = new ItemEditViewModel(clone, Item.GetAllTags(mainVm.Items), isNew: true) { WindowTitle = "項目の複製" };
 
         vm.OkPressed += (_, _) =>
         {
