@@ -19,7 +19,6 @@ namespace FLaunch2.Views;
 public partial class MainWindow : Window
 {
     private readonly WindowLocator _windowLocator = new();
-    private OptionWindow? _optionWindow;
     private CancellationTokenSource? _toastCancelation;
 
     public IClassicDesktopStyleApplicationLifetime? Desktop { get; set; }

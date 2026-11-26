@@ -14,11 +14,11 @@ public class ImportViewModel : ViewModelBase
     {
         var existing = existingItems.ToArray();
 
-        Items = new ObservableCollection<ImportItemViewModel>(
+        Items = [with(
             items.Select(i => new ImportItemViewModel(i, iconExtractor, settings)
             {
                 IsSelected = !existing.Any(e => i.Equals(e, condition))
-            }));
+            }))];
         SelectAllCommand = ReactiveCommand.Create(SelectAll);
         DeselectAllCommand = ReactiveCommand.Create(DeselectAll);
     }
