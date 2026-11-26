@@ -128,6 +128,14 @@ public partial class MainWindow : Window
                 mainVm.ErrorService.NotifyError("データの読み込み中にエラーが発生しました。", ex.ToString(), ErrorSeverity.Error);
             }
         }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (IsActive && IsVisible)
+            {
+                ItemListBox.Focus();
+            }
+        }, DispatcherPriority.Loaded);
     }
 
     private void OnItemTapped(object? sender, Avalonia.Input.TappedEventArgs e)
