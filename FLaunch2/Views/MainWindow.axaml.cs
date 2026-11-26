@@ -606,27 +606,30 @@ public partial class MainWindow : Window
 
     private void OnErrorOccurred(object? sender, ErrorNotificationEventArgs e)
     {
-        if (this.FindControl<Border>("ToastPanel") is Border toastPanel &&
-            this.FindControl<TextBlock>("ToastMessage") is TextBlock toastMessage)
+        Dispatcher.UIThread.InvokeAsync(() =>
         {
-            toastMessage.Text = e.Entry.UserMessage;
-            toastPanel.IsVisible = true;
-
-            // 既存のタイマーをキャンセル
-            _toastCancelation?.Cancel();
-            _toastCancelation = new();
-
-            // 4秒後にトースト通知を非表示
-            _ = Task.Delay(4000, _toastCancelation.Token).ContinueWith(_ =>
+            if (this.FindControl<Border>("ToastPanel") is Border toastPanel &&
+                this.FindControl<TextBlock>("ToastMessage") is TextBlock toastMessage)
             {
-                Dispatcher.UIThread.InvokeAsync(() =>
+                toastMessage.Text = e.Entry.UserMessage;
+                toastPanel.IsVisible = true;
+
+                // 既存のタイマーをキャンセル
+                _toastCancelation?.Cancel();
+                _toastCancelation = new();
+
+                // 4秒後にトースト通知を非表示
+                _ = Task.Delay(4000, _toastCancelation.Token).ContinueWith(_ =>
                 {
-                    if (!_toastCancelation.Token.IsCancellationRequested)
+                    Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        toastPanel.IsVisible = false;
-                    }
+                        if (!_toastCancelation.Token.IsCancellationRequested)
+                        {
+                            toastPanel.IsVisible = false;
+                        }
+                    });
                 });
-            });
-        }
+            }
+        });
     }
 }
