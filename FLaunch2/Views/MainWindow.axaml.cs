@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -26,6 +27,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ItemListBox.AddHandler(KeyDownEvent, OnItemListBoxKeyDown, RoutingStrategies.Tunnel);
         Deactivated += OnDeactivated;
     }
 
@@ -152,6 +154,15 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnItemListBoxKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            ExecuteSelectedItem();
+            e.Handled = true;
+        }
+    }
+
     private void OnContextMenuOpened(object? sender, RoutedEventArgs e)
     {
         if (sender is not ContextMenu contextMenu)
@@ -176,6 +187,11 @@ public partial class MainWindow : Window
     }
 
     private void OnContextExecuteClicked(object? sender, RoutedEventArgs e)
+    {
+        ExecuteSelectedItem();
+    }
+
+    private void ExecuteSelectedItem()
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
