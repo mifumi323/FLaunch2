@@ -158,7 +158,14 @@ public partial class MainWindow : Window
     {
         if (e.Key == Key.Enter)
         {
-            ExecuteSelectedItem();
+            if ((e.KeyModifiers & (KeyModifiers.Control | KeyModifiers.Shift)) == (KeyModifiers.Control | KeyModifiers.Shift))
+            {
+                ExecuteSelectedItemAsAdmin();
+            }
+            else
+            {
+                ExecuteSelectedItem();
+            }
             e.Handled = true;
         }
     }
@@ -201,6 +208,11 @@ public partial class MainWindow : Window
     }
 
     private void OnContextRunAsAdminClicked(object? sender, RoutedEventArgs e)
+    {
+        ExecuteSelectedItemAsAdmin();
+    }
+
+    private void ExecuteSelectedItemAsAdmin()
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
