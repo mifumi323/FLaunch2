@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -19,7 +20,6 @@ namespace FLaunch2.Views;
 public partial class MainWindow : Window
 {
     private readonly WindowLocator _windowLocator = new();
-    private OptionWindow? _optionWindow;
     private CancellationTokenSource? _toastCancelation;
 
     public IClassicDesktopStyleApplicationLifetime? Desktop { get; set; }
@@ -27,6 +27,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ItemListBox.AddHandler(KeyDownEvent, OnItemListBoxKeyDown, RoutingStrategies.Tunnel);
         Deactivated += OnDeactivated;
     }
 
@@ -129,6 +130,14 @@ public partial class MainWindow : Window
                 mainVm.ErrorService.NotifyError("データの読み込み中にエラーが発生しました。", ex.ToString(), ErrorSeverity.Error);
             }
         }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (IsActive && IsVisible)
+            {
+                ItemListBox.Focus();
+            }
+        }, DispatcherPriority.Loaded);
     }
 
     private void OnItemTapped(object? sender, Avalonia.Input.TappedEventArgs e)
@@ -142,6 +151,22 @@ public partial class MainWindow : Window
                 Close();
                 mainVm.ExecuteItemAsync(itemVm.Item);
             }
+        }
+    }
+
+    private void OnItemListBoxKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if ((e.KeyModifiers & (KeyModifiers.Control | KeyModifiers.Shift)) == (KeyModifiers.Control | KeyModifiers.Shift))
+            {
+                ExecuteSelectedItemAsAdmin();
+            }
+            else
+            {
+                ExecuteSelectedItem();
+            }
+            e.Handled = true;
         }
     }
 
@@ -170,6 +195,11 @@ public partial class MainWindow : Window
 
     private void OnContextExecuteClicked(object? sender, RoutedEventArgs e)
     {
+        ExecuteSelectedItem();
+    }
+
+    private void ExecuteSelectedItem()
+    {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
             Close();
@@ -178,6 +208,11 @@ public partial class MainWindow : Window
     }
 
     private void OnContextRunAsAdminClicked(object? sender, RoutedEventArgs e)
+    {
+        ExecuteSelectedItemAsAdmin();
+    }
+
+    private void ExecuteSelectedItemAsAdmin()
     {
         if (GetSelectedItem() is { } item && DataContext is MainViewModel mainVm)
         {
@@ -571,27 +606,30 @@ public partial class MainWindow : Window
 
     private void OnErrorOccurred(object? sender, ErrorNotificationEventArgs e)
     {
-        if (this.FindControl<Border>("ToastPanel") is Border toastPanel &&
-            this.FindControl<TextBlock>("ToastMessage") is TextBlock toastMessage)
+        Dispatcher.UIThread.InvokeAsync(() =>
         {
-            toastMessage.Text = e.Entry.UserMessage;
-            toastPanel.IsVisible = true;
-
-            // 既存のタイマーをキャンセル
-            _toastCancelation?.Cancel();
-            _toastCancelation = new();
-
-            // 4秒後にトースト通知を非表示
-            _ = Task.Delay(4000, _toastCancelation.Token).ContinueWith(_ =>
+            if (this.FindControl<Border>("ToastPanel") is Border toastPanel &&
+                this.FindControl<TextBlock>("ToastMessage") is TextBlock toastMessage)
             {
-                Dispatcher.UIThread.InvokeAsync(() =>
+                toastMessage.Text = e.Entry.UserMessage;
+                toastPanel.IsVisible = true;
+
+                // 既存のタイマーをキャンセル
+                _toastCancelation?.Cancel();
+                _toastCancelation = new();
+
+                // 4秒後にトースト通知を非表示
+                _ = Task.Delay(4000, _toastCancelation.Token).ContinueWith(_ =>
                 {
-                    if (!_toastCancelation.Token.IsCancellationRequested)
+                    Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        toastPanel.IsVisible = false;
-                    }
+                        if (!_toastCancelation.Token.IsCancellationRequested)
+                        {
+                            toastPanel.IsVisible = false;
+                        }
+                    });
                 });
-            });
-        }
+            }
+        });
     }
 }

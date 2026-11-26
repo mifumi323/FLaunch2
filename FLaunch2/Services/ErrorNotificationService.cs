@@ -12,7 +12,7 @@ public class ErrorNotificationService
 {
     public event EventHandler<ErrorNotificationEventArgs>? ErrorOccurred;
 
-    private readonly List<ErrorLogEntry> _errorLog = new();
+    private readonly List<ErrorLogEntry> _errorLog = [];
     private readonly string _logFilePath;
     private const int MaxLogEntries = 100;
 
@@ -111,12 +111,7 @@ public class ErrorLogEntry
     public ErrorSeverity Severity { get; set; }
 }
 
-public class ErrorNotificationEventArgs : EventArgs
+public class ErrorNotificationEventArgs(ErrorLogEntry entry) : EventArgs
 {
-    public ErrorLogEntry Entry { get; }
-
-    public ErrorNotificationEventArgs(ErrorLogEntry entry)
-    {
-        Entry = entry;
-    }
+    public ErrorLogEntry Entry { get; } = entry;
 }

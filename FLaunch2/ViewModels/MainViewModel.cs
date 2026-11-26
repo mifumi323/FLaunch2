@@ -119,7 +119,7 @@ public class MainViewModel : ViewModelBase
 
     internal void Load()
     {
-        Items = new ObservableCollection<Item>(_repository.GetAll());
+        Items = [with(_repository.GetAll())];
     }
 
     internal void LoadSettings()

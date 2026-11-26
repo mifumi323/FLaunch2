@@ -62,7 +62,7 @@
               IsEditable="True" Text="{Binding SearchText}" ItemsSource="{Binding SearchTagOptions}">
     </ComboBox>
     <ListBox x:Name="ItemListBox" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DisplayItems}"
-             Tapped="OnItemTapped">
+             Focusable="True" Tapped="OnItemTapped">
       <ListBox.Styles>
         <Style Selector="ListBoxItem">
           <Setter Property="ContextMenu">
